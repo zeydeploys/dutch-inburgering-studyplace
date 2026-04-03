@@ -319,15 +319,16 @@ header{background:var(--navy);height:68px;display:flex;align-items:center;justif
       <div class="auth-form" id="form-login">
         <div class="auth-err" id="login-err"></div>
         <div class="field-group">
-          <label class="field-label">Kullanıcı Adı</label>
-          <input class="field-input" id="login-user" type="text" placeholder="kullanıcı adın" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+          <label class="field-label">E-posta</label>
+          <input class="field-input" id="login-email" type="email" placeholder="mail@adresin.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()">
         </div>
         <div class="field-group">
           <label class="field-label">Şifre</label>
           <input class="field-input" id="login-pass" type="password" placeholder="şifren" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
         </div>
-        <button class="btn-auth" onclick="doLogin()">Giriş Yap →</button>
+        <button class="btn-auth" id="login-btn" onclick="doLogin()">Giriş Yap →</button>
         <div class="auth-divider"><span>veya</span></div>
+        <button class="btn-auth" style="background:transparent;color:var(--g600);border:1.5px solid var(--g200);font-weight:500;font-size:.85rem" onclick="switchTab('reset')">Şifremi Unuttum</button>
         <div class="auth-note">Hesabın yok mu? Üstteki "Kayıt Ol" sekmesine tıkla.</div>
       </div>
 
@@ -340,8 +341,8 @@ header{background:var(--navy);height:68px;display:flex;align-items:center;justif
           <input class="field-input" id="reg-name" type="text" placeholder="Adın Soyadın" onkeydown="if(event.key==='Enter')doRegister()">
         </div>
         <div class="field-group">
-          <label class="field-label">Kullanıcı Adı</label>
-          <input class="field-input" id="reg-user" type="text" placeholder="benzersiz kullanıcı adı" autocomplete="username" onkeydown="if(event.key==='Enter')doRegister()">
+          <label class="field-label">E-posta</label>
+          <input class="field-input" id="reg-email" type="email" placeholder="mail@adresin.com" autocomplete="email" onkeydown="if(event.key==='Enter')doRegister()">
         </div>
         <div class="field-group">
           <label class="field-label">Şifre <span style="font-weight:400;text-transform:none;color:var(--g400)">(en az 6 karakter)</span></label>
@@ -351,8 +352,22 @@ header{background:var(--navy);height:68px;display:flex;align-items:center;justif
           <label class="field-label">Şifre Tekrar</label>
           <input class="field-input" id="reg-pass2" type="password" placeholder="şifreyi tekrar gir" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
         </div>
-        <button class="btn-auth" onclick="doRegister()">Hesap Oluştur →</button>
-        <div class="auth-note">Kaydolarak ilerleme ve quiz sonuçların otomatik kaydedilir.</div>
+        <button class="btn-auth" id="reg-btn" onclick="doRegister()">Hesap Oluştur →</button>
+        <div class="auth-note">Kayıt sonrası e-postana doğrulama linki gelecek.</div>
+      </div>
+
+      <!-- RESET FORM -->
+      <div class="auth-form hidden" id="form-reset">
+        <div class="auth-err" id="reset-err"></div>
+        <div class="auth-ok" id="reset-ok"></div>
+        <div style="font-size:.85rem;color:var(--g600);margin-bottom:14px;line-height:1.5">E-posta adresini gir, şifre sıfırlama bağlantısı gönderelim.</div>
+        <div class="field-group">
+          <label class="field-label">E-posta</label>
+          <input class="field-input" id="reset-email" type="email" placeholder="mail@adresin.com" onkeydown="if(event.key==='Enter')doReset()">
+        </div>
+        <button class="btn-auth" id="reset-btn" onclick="doReset()">Sıfırlama Maili Gönder →</button>
+        <div class="auth-divider"><span>veya</span></div>
+        <button class="btn-auth" style="background:transparent;color:var(--g600);border:1.5px solid var(--g200);font-weight:500;font-size:.85rem" onclick="switchTab('login')">← Giriş Yap</button>
       </div>
     </div>
   </div>
@@ -1748,55 +1763,84 @@ function appendMsg(text, who) {
 
 function scrollChat() { const a = document.getElementById('chat-area'); a.scrollTop = a.scrollHeight; }
 
-// ═══════════ AUTH & STORAGE ═══════════
-const STORAGE_KEY_USERS = 'inburgering_users';
-const STORAGE_KEY_SESSION = 'inburgering_session';
+// ═══════════ SUPABASE AUTH & STORAGE ═══════════
+const SUPABASE_URL = 'https://cnzhxebtziwdeymwxwks.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Z4fL2k7hp2k7Zqn5HagY9Q_s9wmjd-Z';
 let currentUser = null;
+let supabaseSession = null;
 
-// Simple hash (not cryptographic — for demo purposes)
-function simpleHash(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) { h = (Math.imul(31, h) + str.charCodeAt(i)) | 0; }
-  return Math.abs(h).toString(36);
+// ── SUPABASE API HELPERS ──
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(SUPABASE_URL + path, {
+    ...opts,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + (supabaseSession?.access_token || SUPABASE_KEY),
+      'Content-Type': 'application/json',
+      ...(opts.headers || {})
+    }
+  });
+  return res;
 }
 
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY_USERS) || '{}'); } catch { return {}; }
+async function sbAuth(action, body) {
+  const res = await fetch(SUPABASE_URL + '/auth/v1/' + action, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  return res.json();
 }
 
-function saveUsers(users) {
-  localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+// ── PROGRESS IN DB ──
+async function loadProgress(userId) {
+  const res = await sbFetch('/rest/v1/progress?user_id=eq.' + userId + '&select=*');
+  if (!res.ok) return null;
+  const rows = await res.json();
+  return rows[0] || null;
 }
 
-function getUserData(username) {
-  const users = getUsers();
-  return users[username] || null;
+async function upsertProgress(userId, data) {
+  await sbFetch('/rest/v1/progress', {
+    method: 'POST',
+    headers: { 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({ user_id: userId, ...data })
+  });
 }
 
 function initDefaultProgress() {
   return {
-    lessonsCompleted: [],
-    quizScores: [],
-    examScores: [],
-    totalHours: 0,
+    lessons_completed: [],
+    quiz_scores: [],
+    exam_scores: [],
+    total_hours: 0,
     streak: 0,
-    lastLoginDate: new Date().toDateString(),
+    last_login_date: new Date().toDateString(),
     xp: 0,
-    joinDate: new Date().toLocaleDateString('tr-TR')
+    join_date: new Date().toLocaleDateString('tr-TR')
   };
 }
 
-// ── TAB SWITCH ──
+// ── UI HELPERS ──
+function setLoading(btnId, loading, defaultText) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled = loading;
+  btn.textContent = loading ? 'Lütfen bekle...' : defaultText;
+}
+
 function switchTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.auth-form').forEach(f => f.classList.add('hidden'));
   document.getElementById('form-' + tab).classList.remove('hidden');
-  event.target.classList.add('active');
+  if (event && event.target && event.target.classList.contains('auth-tab')) {
+    event.target.classList.add('active');
+  }
   clearAuthErrors();
 }
 
 function clearAuthErrors() {
-  ['login-err','reg-err','reg-ok'].forEach(id => {
+  ['login-err','reg-err','reg-ok','reset-err','reset-ok'].forEach(id => {
     const el = document.getElementById(id);
     if(el) { el.classList.remove('show'); el.textContent = ''; }
   });
@@ -1805,72 +1849,84 @@ function clearAuthErrors() {
 
 function showErr(id, msg) {
   const el = document.getElementById(id);
-  el.textContent = msg; el.classList.add('show');
+  if (el) { el.textContent = msg; el.classList.add('show'); }
 }
 
 function showOk(id, msg) {
   const el = document.getElementById(id);
-  el.textContent = msg; el.classList.add('show');
+  if (el) { el.textContent = msg; el.classList.add('show'); }
 }
 
 // ── REGISTER ──
-function doRegister() {
+async function doRegister() {
   clearAuthErrors();
   const name = document.getElementById('reg-name').value.trim();
-  const user = document.getElementById('reg-user').value.trim().toLowerCase();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
   const pass = document.getElementById('reg-pass').value;
   const pass2 = document.getElementById('reg-pass2').value;
 
   if (!name) { document.getElementById('reg-name').classList.add('error'); return showErr('reg-err', 'Ad soyad gerekli.'); }
-  if (!user || user.length < 3) { document.getElementById('reg-user').classList.add('error'); return showErr('reg-err', 'Kullanıcı adı en az 3 karakter olmalı.'); }
-  if (!/^[a-z0-9_]+$/.test(user)) { document.getElementById('reg-user').classList.add('error'); return showErr('reg-err', 'Kullanıcı adında sadece harf, rakam ve _ kullanılabilir.'); }
+  if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) { document.getElementById('reg-email').classList.add('error'); return showErr('reg-err', 'Geçerli bir e-posta gir.'); }
   if (pass.length < 6) { document.getElementById('reg-pass').classList.add('error'); return showErr('reg-err', 'Şifre en az 6 karakter olmalı.'); }
   if (pass !== pass2) { document.getElementById('reg-pass2').classList.add('error'); return showErr('reg-err', 'Şifreler eşleşmiyor.'); }
 
-  const users = getUsers();
-  if (users[user]) { document.getElementById('reg-user').classList.add('error'); return showErr('reg-err', 'Bu kullanıcı adı zaten alınmış. Başka bir ad seç.'); }
+  setLoading('reg-btn', true, 'Hesap Oluştur →');
+  const data = await sbAuth('signup', {
+    email,
+    password: pass,
+    options: { data: { full_name: name } }
+  });
+  setLoading('reg-btn', false, 'Hesap Oluştur →');
 
-  users[user] = {
-    name,
-    username: user,
-    hash: simpleHash(pass),
-    progress: initDefaultProgress()
-  };
-  saveUsers(users);
-  showOk('reg-ok', '✓ Hesap oluşturuldu! Giriş yapabilirsin.');
-  setTimeout(() => {
-    switchTab('login');
-    document.getElementById('login-user').value = user;
-  }, 1400);
+  if (data.error) {
+    const msg = data.error.message.includes('already') ? 'Bu e-posta zaten kayıtlı.' : data.error.message;
+    return showErr('reg-err', '✗ ' + msg);
+  }
+
+  showOk('reg-ok', '✓ Hesap oluşturuldu! E-postanı kontrol et — doğrulama linki gönderdik.');
 }
 
 // ── LOGIN ──
-function doLogin() {
+async function doLogin() {
   clearAuthErrors();
-  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
   const pass = document.getElementById('login-pass').value;
 
-  if (!user) { document.getElementById('login-user').classList.add('error'); return showErr('login-err', 'Kullanıcı adını gir.'); }
+  if (!email) { document.getElementById('login-email').classList.add('error'); return showErr('login-err', 'E-posta adresini gir.'); }
   if (!pass) { document.getElementById('login-pass').classList.add('error'); return showErr('login-err', 'Şifreni gir.'); }
 
-  const users = getUsers();
-  const userData = users[user];
-  if (!userData) { document.getElementById('login-user').classList.add('error'); return showErr('login-err', 'Böyle bir kullanıcı bulunamadı.'); }
-  if (userData.hash !== simpleHash(pass)) { document.getElementById('login-pass').classList.add('error'); return showErr('login-err', 'Şifre yanlış.'); }
+  setLoading('login-btn', true, 'Giriş Yap →');
+  const data = await sbAuth('token?grant_type=password', { email, password: pass });
+  setLoading('login-btn', false, 'Giriş Yap →');
+
+  if (data.error || !data.access_token) {
+    document.getElementById('login-pass').classList.add('error');
+    return showErr('login-err', '✗ E-posta veya şifre yanlış.');
+  }
+
+  supabaseSession = { access_token: data.access_token, refresh_token: data.refresh_token };
+  localStorage.setItem('sb_session', JSON.stringify(supabaseSession));
+
+  const user = data.user;
+  const name = user.user_metadata?.full_name || email.split('@')[0];
+
+  // Load or init progress
+  let prog = await loadProgress(user.id);
+  if (!prog) {
+    prog = initDefaultProgress();
+    await upsertProgress(user.id, prog);
+  }
 
   // Update streak
   const today = new Date().toDateString();
-  const prog = userData.progress;
-  if (prog.lastLoginDate !== today) {
+  if (prog.last_login_date !== today) {
     const yesterday = new Date(Date.now() - 86400000).toDateString();
-    prog.streak = (prog.lastLoginDate === yesterday) ? (prog.streak || 0) + 1 : 1;
-    prog.lastLoginDate = today;
-    users[user] = userData;
-    saveUsers(users);
+    prog.streak = (prog.last_login_date === yesterday) ? (prog.streak || 0) + 1 : 1;
+    prog.last_login_date = today;
+    await upsertProgress(user.id, { streak: prog.streak, last_login_date: prog.last_login_date });
   }
 
-  currentUser = userData;
-  localStorage.setItem(STORAGE_KEY_SESSION, user);
+  currentUser = { id: user.id, name, email, progress: prog };
   loginSuccess();
 }
 
@@ -1881,12 +1937,34 @@ function loginSuccess() {
   renderLessons('all');
 }
 
+// ── PASSWORD RESET ──
+async function doReset() {
+  clearAuthErrors();
+  const email = document.getElementById('reset-email').value.trim().toLowerCase();
+  if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+    document.getElementById('reset-email').classList.add('error');
+    return showErr('reset-err', 'Geçerli bir e-posta gir.');
+  }
+
+  setLoading('reset-btn', true, 'Sıfırlama Maili Gönder →');
+  const res = await fetch(SUPABASE_URL + '/auth/v1/recover', {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+  setLoading('reset-btn', false, 'Sıfırlama Maili Gönder →');
+
+  showOk('reset-ok', '✓ Sıfırlama bağlantısı e-postana gönderildi. Spam klasörünü de kontrol et.');
+}
+
 // ── LOGOUT ──
-function doLogout() {
+async function doLogout() {
+  await sbFetch('/auth/v1/logout', { method: 'POST' });
   currentUser = null;
-  localStorage.removeItem(STORAGE_KEY_SESSION);
+  supabaseSession = null;
+  localStorage.removeItem('sb_session');
   document.getElementById('auth-overlay').classList.remove('hidden');
-  document.getElementById('login-user').value = '';
+  document.getElementById('login-email').value = '';
   document.getElementById('login-pass').value = '';
   clearAuthErrors();
 }
@@ -1902,31 +1980,24 @@ function updateHeaderUser() {
 }
 
 // ── SAVE PROGRESS ──
-function saveProgress() {
+async function saveProgress() {
   if (!currentUser) return;
-  const users = getUsers();
-  users[currentUser.username] = currentUser;
-  saveUsers(users);
+  await upsertProgress(currentUser.id, currentUser.progress);
 }
 
 // ── DASHBOARD UPDATE ──
 function updateDashboard() {
   if (!currentUser) return;
   const p = currentUser.progress;
-  const hoursEl = document.querySelector('.snum');
   const statNums = document.querySelectorAll('.snum');
-  if(statNums[0]) statNums[0].textContent = p.totalHours || 0;
-  if(statNums[1]) statNums[1].textContent = (p.lessonsCompleted || []).length;
+  if(statNums[0]) statNums[0].textContent = p.total_hours || 0;
+  if(statNums[1]) statNums[1].textContent = (p.lessons_completed || []).length;
   if(statNums[2]) {
-    const scores = p.quizScores || [];
+    const scores = p.quiz_scores || [];
     statNums[2].textContent = scores.length > 0 ? '%' + Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : '—';
   }
-
-  // Update XP bar if exists
   const xpFill = document.querySelector('.xp-fill');
   if (xpFill) { xpFill.style.width = Math.min((p.xp || 0) % 100, 100) + '%'; }
-
-  // Welcome message
   const welcomeTitle = document.querySelector('#sec-dashboard .stitle');
   if (welcomeTitle) {
     const hour = new Date().getHours();
@@ -1940,11 +2011,11 @@ const _origOpenLesson = openLesson;
 window.openLesson = function(i) {
   _origOpenLesson(i);
   if (!currentUser) return;
-  // Mark as viewed — add XP
-  if (!currentUser.progress.lessonsCompleted.includes(i)) {
-    currentUser.progress.lessonsCompleted.push(i);
-    currentUser.progress.xp = (currentUser.progress.xp || 0) + 20;
-    currentUser.progress.totalHours = parseFloat(((currentUser.progress.totalHours || 0) + 0.75).toFixed(1));
+  const prog = currentUser.progress;
+  if (!(prog.lessons_completed || []).includes(i)) {
+    prog.lessons_completed = [...(prog.lessons_completed || []), i];
+    prog.xp = (prog.xp || 0) + 20;
+    prog.total_hours = parseFloat(((prog.total_hours || 0) + 0.75).toFixed(1));
     saveProgress();
     updateDashboard();
     updateHeaderUser();
@@ -1957,9 +2028,9 @@ window.showQResult = function() {
   _origShowQResult();
   if (!currentUser) return;
   const pct = Math.round((QS.score / QORDER.length) * 100);
-  currentUser.progress.quizScores = currentUser.progress.quizScores || [];
-  currentUser.progress.quizScores.push(pct);
-  currentUser.progress.xp = (currentUser.progress.xp || 0) + 10;
+  const prog = currentUser.progress;
+  prog.quiz_scores = [...(prog.quiz_scores || []), pct];
+  prog.xp = (prog.xp || 0) + 10;
   saveProgress();
   updateDashboard();
 };
@@ -1969,39 +2040,55 @@ const _origFinishExam = finishExam;
 window.finishExam = function() {
   _origFinishExam();
   if (!currentUser) return;
-  const scores = document.querySelectorAll('#exam-r .bigscore');
   currentUser.progress.xp = (currentUser.progress.xp || 0) + 50;
   saveProgress();
 };
 
 // ── AUTO-LOGIN from session ──
-function tryAutoLogin() {
-  const savedUser = localStorage.getItem(STORAGE_KEY_SESSION);
-  if (savedUser) {
-    const users = getUsers();
-    if (users[savedUser]) {
-      currentUser = users[savedUser];
-      // Update streak
-      const today = new Date().toDateString();
-      const prog = currentUser.progress;
-      if (prog.lastLoginDate !== today) {
-        const yesterday = new Date(Date.now() - 86400000).toDateString();
-        prog.streak = (prog.lastLoginDate === yesterday) ? (prog.streak || 0) + 1 : 1;
-        prog.lastLoginDate = today;
-        users[savedUser] = currentUser;
-        saveUsers(users);
-      }
-      loginSuccess();
-      return true;
+async function tryAutoLogin() {
+  const saved = localStorage.getItem('sb_session');
+  if (!saved) return false;
+  try {
+    const sess = JSON.parse(saved);
+    // Refresh token
+    const res = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: sess.refresh_token })
+    });
+    const data = await res.json();
+    if (!data.access_token) { localStorage.removeItem('sb_session'); return false; }
+
+    supabaseSession = { access_token: data.access_token, refresh_token: data.refresh_token };
+    localStorage.setItem('sb_session', JSON.stringify(supabaseSession));
+
+    const user = data.user;
+    const name = user.user_metadata?.full_name || user.email.split('@')[0];
+    let prog = await loadProgress(user.id);
+    if (!prog) { prog = initDefaultProgress(); await upsertProgress(user.id, prog); }
+
+    // Update streak
+    const today = new Date().toDateString();
+    if (prog.last_login_date !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      prog.streak = (prog.last_login_date === yesterday) ? (prog.streak || 0) + 1 : 1;
+      prog.last_login_date = today;
+      await upsertProgress(user.id, { streak: prog.streak, last_login_date: prog.last_login_date });
     }
+
+    currentUser = { id: user.id, name, email: user.email, progress: prog };
+    loginSuccess();
+    return true;
+  } catch(e) {
+    localStorage.removeItem('sb_session');
+    return false;
   }
-  return false;
 }
 
 // ═══════════ INIT ═══════════
-if (!tryAutoLogin()) {
-  renderLessons('all'); // render lessons even before login for preview
-}
+tryAutoLogin().then(loggedIn => {
+  if (!loggedIn) renderLessons('all');
+});
 </script>
 </body>
 </html>
