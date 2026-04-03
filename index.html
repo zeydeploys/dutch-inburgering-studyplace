@@ -334,6 +334,10 @@ header{background:var(--navy);height:68px;display:flex;align-items:center;justif
           <label class="field-label">Şifre</label>
           <input class="field-input" id="login-pass" type="password" placeholder="şifren" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
         </div>
+        <div style="display:flex;align-items:center;gap:9px;margin-top:2px">
+          <input type="checkbox" id="remember-me" checked style="width:15px;height:15px;accent-color:var(--navy);cursor:pointer;flex-shrink:0">
+          <label for="remember-me" style="font-size:.82rem;color:var(--g600);cursor:pointer;user-select:none">Beni hatırla</label>
+        </div>
         <button class="btn-auth" id="login-btn" onclick="doLogin()">Giriş Yap →</button>
         <div class="auth-divider"><span>veya</span></div>
         <button class="btn-auth" style="background:transparent;color:var(--g600);border:1.5px solid var(--g200);font-weight:500;font-size:.85rem" onclick="switchTab('reset')">Şifremi Unuttum</button>
@@ -1913,7 +1917,12 @@ async function doLogin() {
   }
 
   supabaseSession = { access_token: data.access_token, refresh_token: data.refresh_token };
-  localStorage.setItem('sb_session', JSON.stringify(supabaseSession));
+  const rememberMe = document.getElementById('remember-me');
+  if (rememberMe && rememberMe.checked) {
+    localStorage.setItem('sb_session', JSON.stringify(supabaseSession));
+  } else {
+    sessionStorage.setItem('sb_session', JSON.stringify(supabaseSession));
+  }
 
   const user = data.user;
   const name = user.user_metadata?.full_name || email.split('@')[0];
@@ -1970,7 +1979,7 @@ async function doLogout() {
   await sbFetch('/auth/v1/logout', { method: 'POST' });
   currentUser = null;
   supabaseSession = null;
-  localStorage.removeItem('sb_session');
+  localStorage.removeItem('sb_session'); sessionStorage.removeItem('sb_session');
   document.getElementById('auth-overlay').classList.remove('hidden');
   document.getElementById('login-email').value = '';
   document.getElementById('login-pass').value = '';
@@ -2054,7 +2063,7 @@ window.finishExam = function() {
 
 // ── AUTO-LOGIN from session ──
 async function tryAutoLogin() {
-  const saved = localStorage.getItem('sb_session');
+  const saved = localStorage.getItem('sb_session') || sessionStorage.getItem('sb_session');
   if (!saved) return false;
   try {
     const sess = JSON.parse(saved);
