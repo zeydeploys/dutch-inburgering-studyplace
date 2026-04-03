@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hollandaca Öğren — İnburgering için A1→B1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:#C0392B; --red2:#E74C3C;
+  --navy:#0A1628; --navy2:#1a2e4a;
+  --gold:#D4930A; --gold2:#F5C842;
+  --green:#219150; --blue:#2471A3;
+  --white:#FFFFFF; --off:#F7F5F1;
+  --g100:#F2F0EB; --g200:#E4E1DA; --g400:#A09890; --g600:#6B6560;
+  --shadow:0 2px 10px rgba(10,22,40,.08);
+  --shadowM:0 6px 22px rgba(10,22,40,.13);
+  --shadowL:0 14px 40px rgba(10,22,40,.18);
+  --r:13px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--navy);min-height:100vh}
+
+/* ── HEADER ── */
+header{background:var(--navy);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:200;box-shadow:var(--shadowL)}
+.logo{display:flex;align-items:center;gap:12px}
+.flag{width:34px;height:22px;border-radius:3px;overflow:hidden;display:flex;flex-direction:column}
+.flag div{flex:1}
+.fr{background:#AE1C28}.fw{background:#fff}.fb{background:#21468B}
+.logo-txt{font-family:'Playfair Display',serif;color:#fff;font-size:1.2rem}
+.logo-txt span{color:var(--gold2)}
+.hbadge{background:rgba(245,200,66,.12);border:1px solid var(--gold2);color:var(--gold2);font-size:.75rem;font-weight:600;padding:4px 13px;border-radius:20px;letter-spacing:.4px}
+
+/* ── NAV ── */
+.nav{background:#fff;border-bottom:2px solid var(--g200);display:flex;overflow-x:auto;padding:0 28px;gap:2px}
+.nb{padding:14px 18px;border:none;background:transparent;color:var(--g600);font-family:'DM Sans',sans-serif;font-size:.87rem;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .2s}
+.nb:hover{color:var(--navy);background:var(--g100)}
+.nb.active{color:var(--red);border-bottom-color:var(--red);font-weight:700}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1260px;margin:0 auto;display:grid;grid-template-columns:1fr 300px;gap:26px;padding:26px 28px}
+.sec{display:none}.sec.active{display:block;animation:fu .3s ease}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.stitle{font-family:'Playfair Display',serif;font-size:1.55rem;margin-bottom:5px}
+.ssub{font-size:.88rem;color:var(--g600);margin-bottom:22px}
+
+/* ── CARD ── */
+.card{background:#fff;border-radius:var(--r);border:1px solid var(--g200);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
+.ctitle{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:5px}
+.csub{font-size:.85rem;color:var(--g600);margin-bottom:14px}
+
+/* ── STATS ── */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.scard{background:#fff;border-radius:var(--r);border:1px solid var(--g200);box-shadow:var(--shadow);padding:20px 16px;text-align:center;transition:transform .2s,box-shadow .2s;cursor:default}
+.scard:hover{transform:translateY(-4px);box-shadow:var(--shadowM)}
+.snum{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--red);line-height:1;margin-bottom:5px}
+.slbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g600)}
+.ssub2{font-size:.75rem;color:var(--g400);margin-top:3px}
+
+/* ── PROGRESS ── */
+.prow{margin-bottom:13px}
+.phdr{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:5px}
+.ptrack{background:var(--g200);height:7px;border-radius:5px;overflow:hidden}
+.pfill{height:100%;border-radius:5px;transition:width 1s ease}
+
+/* ── LESSON GRID ── */
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin-bottom:18px}
+.lcard{background:#fff;border-radius:var(--r);border:1px solid var(--g200);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.lcard:hover{transform:translateY(-5px);box-shadow:var(--shadowM)}
+.lcard.locked{cursor:default;opacity:.65}
+.lhdr{padding:20px 18px 16px;color:#fff;position:relative;min-height:85px}
+.lhdr.a1c{background:linear-gradient(135deg,#1a5e3a,#219150)}
+.lhdr.a1plus{background:linear-gradient(135deg,#1a4a5e,#2471A3)}
+.lhdr.a2c{background:linear-gradient(135deg,#5e3a1a,#D4930A)}
+.lhdr.b1c{background:linear-gradient(135deg,#5e1a1a,#C0392B)}
+.lhdr.done{background:linear-gradient(135deg,#145a32,#1e8449)}
+.lnum{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.65;margin-bottom:5px}
+.lname{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700}
+.lbadge{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.22);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.lbody{padding:16px 18px}
+.ltags{display:flex;gap:7px;margin-bottom:9px;flex-wrap:wrap}
+.tag{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px}
+.tg{background:rgba(33,145,80,.1);color:var(--green)}
+.tb{background:rgba(36,113,163,.1);color:var(--blue)}
+.to{background:rgba(212,147,10,.12);color:var(--gold)}
+.tr{background:rgba(192,57,43,.1);color:var(--red)}
+.tt{background:var(--g100);color:var(--g600)}
+.ldesc{font-size:.85rem;color:var(--g600);line-height:1.5;margin-bottom:13px}
+.lbtn{width:100%;padding:10px;border:none;border-radius:8px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s}
+.lbtn:hover{background:var(--red)}
+.lbtn.done{background:var(--g200);color:var(--g600)}
+.lbtn.done:hover{background:var(--green);color:#fff}
+.lbtn.locked{background:var(--g200);color:var(--g400);cursor:not-allowed}
+
+/* ── MODAL ── */
+.mover{display:none;position:fixed;inset:0;background:rgba(10,22,40,.72);z-index:300;align-items:center;justify-content:center;padding:18px}
+.mover.open{display:flex}
+.modal{background:#fff;border-radius:18px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadowL);animation:mi .3s ease}
+@keyframes mi{from{opacity:0;transform:scale(.93) translateY(18px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.mtop{background:var(--navy);padding:26px 30px 22px;color:#fff;border-radius:18px 18px 0 0;position:relative}
+.mclose{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.12);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mclose:hover{background:rgba(255,255,255,.25)}
+.mbody{padding:26px 30px 30px}
+
+/* modal content */
+.vtable{width:100%;border-collapse:collapse;font-size:.88rem;margin-bottom:20px}
+.vtable th{background:var(--g100);padding:9px 13px;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g600)}
+.vtable td{padding:10px 13px;border-bottom:1px solid var(--g200)}
+.vtable tr:last-child td{border-bottom:none}
+.vtable tr:hover td{background:var(--g100)}
+.dw{font-weight:700;color:var(--navy)}
+.trw{color:var(--g600)}
+.tip-tr{font-style:italic;color:var(--red);font-size:.8rem}
+
+.dbox{background:var(--g100);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.dbtitle{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g400);margin-bottom:10px}
+.dline{margin-bottom:10px;font-size:.88rem;line-height:1.5}
+.dp{font-weight:700;color:var(--navy)}
+.dtr{font-size:.78rem;color:var(--g400);font-style:italic}
+.dtu{font-size:.78rem;color:var(--red);font-style:italic}
+
+.grule{border-left:3px solid var(--gold2);padding:13px 16px;background:rgba(212,147,10,.07);border-radius:0 8px 8px 0;margin-bottom:12px;font-size:.88rem;line-height:1.6}
+.grule strong{color:var(--navy)}
+.trule{border-left:3px solid #E74C3C;padding:13px 16px;background:rgba(231,76,60,.06);border-radius:0 8px 8px 0;margin-bottom:12px;font-size:.88rem;line-height:1.6}
+.trule strong{color:var(--red)}
+
+.stitle2{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy);margin:20px 0 10px;padding-bottom:7px;border-bottom:2px solid var(--g200)}
+.exrow{display:flex;gap:14px;padding:9px 13px;background:var(--g100);border-radius:8px;margin-bottom:7px;font-size:.85rem;align-items:baseline}
+.exnl{font-weight:700;color:var(--navy);flex:1}
+.exen{color:var(--g600);flex:1;font-style:italic}
+.extr{color:var(--red);flex:1;font-style:italic}
+
+/* ── QUIZ ── */
+.qwrap{max-width:680px}
+.qqbox{background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:22px 24px;margin-bottom:18px;box-shadow:var(--shadow)}
+.qqnum{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:7px}
+.qqtxt{font-size:.97rem;font-weight:600;color:var(--navy);margin-bottom:14px;line-height:1.45}
+.qhint{font-size:.8rem;color:var(--g400);font-style:italic;margin-bottom:10px}
+.qopts{display:grid;gap:8px}
+.qopt{padding:12px 15px;border:2px solid var(--g200);border-radius:9px;cursor:pointer;font-size:.88rem;font-family:'DM Sans',sans-serif;background:#fff;text-align:left;transition:all .18s;color:var(--navy)}
+.qopt:hover{border-color:var(--navy);background:var(--g100)}
+.qopt.sel{border-color:var(--navy);background:rgba(10,22,40,.06);font-weight:600}
+.qopt.ok{border-color:var(--green);background:rgba(33,145,80,.08);color:var(--green);font-weight:600}
+.qopt.bad{border-color:var(--red);background:rgba(192,57,43,.07);color:var(--red)}
+.qfb{display:none;padding:11px 15px;border-radius:8px;font-size:.85rem;margin-top:9px;line-height:1.5}
+.qfb.ok{background:rgba(33,145,80,.1);color:#145a32;border:1px solid rgba(33,145,80,.22)}
+.qfb.bad{background:rgba(192,57,43,.07);color:var(--red);border:1px solid rgba(192,57,43,.18)}
+.btnchk{padding:12px 26px;background:var(--navy);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s;margin-top:7px}
+.btnchk:hover{background:var(--red)}
+.btnnxt{padding:12px 26px;background:var(--green);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;margin-left:9px;display:none}
+.btnnxt:hover{background:#176d3b}
+.scorecard{background:#fff;border-radius:var(--r);padding:34px;text-align:center;box-shadow:var(--shadowM);border:1px solid var(--g200)}
+.bigscore{font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:900;color:var(--red);line-height:1}
+
+/* ── EXAM ── */
+.estart{background:#fff;border-radius:var(--r);padding:44px 36px;text-align:center;box-shadow:var(--shadowM);border:1px solid var(--g200);max-width:480px}
+.eemoji{font-size:3.2rem;margin-bottom:16px}
+.etitle{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:9px}
+.edesc{color:var(--g600);font-size:.9rem;line-height:1.6;margin-bottom:22px}
+.eigrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:26px}
+.eiitem{background:var(--g100);border-radius:10px;padding:13px 10px;text-align:center}
+.einum{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--navy)}
+.eilbl{font-size:.68rem;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.btnstart{padding:14px 38px;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btnstart:hover{background:var(--red2);transform:translateY(-2px)}
+.ebar{background:var(--navy);border-radius:var(--r);padding:15px 22px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;color:#fff}
+.etimer{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--gold2)}
+.etimer.warn{color:var(--red2)}
+
+/* ── PLAN ── */
+.planmonth{background:#fff;border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--g200);border-left:4px solid var(--red)}
+.planmonth.m2{border-left-color:var(--gold2)}
+.planmonth.m3{border-left-color:var(--green)}
+.pmtitle{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:3px}
+.pmsub{font-size:.8rem;color:var(--g400);margin-bottom:16px}
+.pwk{margin-bottom:13px}
+.pwktitle{font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:7px}
+.pitems{list-style:none}
+.pitems li{font-size:.84rem;color:var(--g600);padding:4px 0 4px 17px;position:relative;line-height:1.45}
+.pitems li::before{content:'›';position:absolute;left:3px;color:var(--gold);font-weight:700}
+.pitems li.trfocus{color:var(--red)}
+.pitems li.trfocus::before{content:'🇹🇷';left:0;font-size:.7rem}
+.schbox{background:var(--g100);border-radius:9px;padding:16px 18px;margin-top:12px}
+.schbox h5{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g400);margin-bottom:9px}
+.schrow{display:flex;align-items:center;gap:11px;margin-bottom:7px;font-size:.84rem}
+.scht{font-weight:700;color:var(--navy);width:65px;flex-shrink:0}
+
+/* ── TUTOR ── */
+.tuthdr{display:flex;align-items:center;gap:13px;padding:16px 20px;background:var(--navy);border-radius:var(--r) var(--r) 0 0}
+.tutav{width:42px;height:42px;border-radius:50%;background:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.tutinfo{color:#fff}
+.tutname{font-weight:700;font-size:.93rem}
+.tutstatus{font-size:.75rem;color:rgba(255,255,255,.55)}
+.tutdot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:4px}
+.chatarea{height:460px;overflow-y:auto;padding:18px 20px;background:#fff;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:83%;padding:11px 15px;border-radius:13px;font-size:.87rem;line-height:1.55}
+.msg-t{background:var(--g100);color:var(--navy);border-bottom-left-radius:3px;align-self:flex-start}
+.msg-u{background:var(--navy);color:#fff;border-bottom-right-radius:3px;align-self:flex-end}
+.typing{background:var(--g100);padding:11px 16px;border-radius:13px;border-bottom-left-radius:3px;align-self:flex-start;display:none}
+.dots{display:flex;gap:4px;align-items:center}
+.dots span{width:6px;height:6px;background:var(--g400);border-radius:50%;animation:bo 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes bo{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.qprompts{display:flex;flex-wrap:wrap;gap:7px;padding:0 16px 12px;background:#fff}
+.qpbtn{padding:5px 12px;border:1.5px solid var(--g200);background:#fff;border-radius:18px;font-size:.75rem;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--g600);transition:all .18s}
+.qpbtn:hover{border-color:var(--navy);color:var(--navy);background:var(--g100)}
+.cinputrow{display:flex;gap:9px;padding:12px 16px;background:#fff;border-top:1px solid var(--g200);border-radius:0 0 var(--r) var(--r)}
+.cinput{flex:1;padding:10px 15px;border:2px solid var(--g200);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.87rem;outline:none;color:var(--navy);transition:border-color .2s}
+.cinput:focus{border-color:var(--navy)}
+.btnsend{padding:10px 18px;background:var(--red);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.87rem;font-weight:600;cursor:pointer;transition:background .2s}
+.btnsend:hover{background:var(--red2)}
+
+/* ── RESOURCES ── */
+.rescat{margin-bottom:20px}
+.rctitle{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--g400);margin-bottom:11px}
+.resitem{display:flex;align-items:flex-start;gap:13px;padding:13px 15px;background:#fff;border:1px solid var(--g200);border-radius:10px;margin-bottom:7px;transition:box-shadow .2s,transform .2s}
+.resitem:hover{box-shadow:var(--shadow);transform:translateX(3px)}
+.rico{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.rname{font-weight:600;font-size:.9rem;margin-bottom:2px}
+.rdesc{font-size:.8rem;color:var(--g600);line-height:1.4}
+
+/* ── SIDEBAR ── */
+.sidebar{display:flex;flex-direction:column;gap:18px}
+.sbcard{background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid var(--g200)}
+.sbcard h4{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--g400);margin-bottom:14px}
+.mrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--g100)}
+.mrow:last-child{border-bottom:none}
+.mico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0}
+.mico.done{background:var(--green);color:#fff}
+.mico.todo{background:var(--g200);color:var(--g400)}
+.mtxt{font-size:.83rem}
+.mtxt.todo{color:var(--g400)}
+
+/* ── LEVEL TAGS ── */
+.levelrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.ltag{padding:6px 14px;border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.ltag.a1{background:rgba(33,145,80,.1);color:var(--green);border-color:rgba(33,145,80,.3)}
+.ltag.a1plus{background:rgba(36,113,163,.1);color:var(--blue);border-color:rgba(36,113,163,.3)}
+.ltag.a2{background:rgba(212,147,10,.1);color:var(--gold);border-color:rgba(212,147,10,.3)}
+.ltag.b1{background:rgba(192,57,43,.1);color:var(--red);border-color:rgba(192,57,43,.3)}
+.ltag.active{transform:scale(1.05)}
+.ltag.a1.active{background:var(--green);color:#fff}
+.ltag.a1plus.active{background:var(--blue);color:#fff}
+.ltag.a2.active{background:var(--gold);color:#fff}
+.ltag.b1.active{background:var(--red);color:#fff}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.sidebar{display:none}.sgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.sgrid{grid-template-columns:1fr 1fr}.eigrid{grid-template-columns:repeat(3,1fr)}}
+
+/* ── AUTH OVERLAY ── */
+.auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy) 0%,#1a2e4a 50%,#0d1f35 100%);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-overlay.hidden{display:none}
+.auth-box{background:#fff;border-radius:20px;width:100%;max-width:440px;overflow:hidden;box-shadow:var(--shadowL);animation:authIn .4s ease}
+@keyframes authIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.auth-top{background:var(--navy);padding:32px 36px 28px;text-align:center;position:relative;overflow:hidden}
+.auth-top::before{content:'';position:absolute;width:200px;height:200px;background:rgba(245,200,66,.06);border-radius:50%;top:-60px;right:-40px}
+.auth-flag{display:flex;gap:0;margin:0 auto 16px;width:48px;height:32px;border-radius:5px;overflow:hidden;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.auth-flag div{flex:1}
+.auth-logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;margin-bottom:4px}
+.auth-logo span{color:var(--gold2)}
+.auth-tagline{font-size:.8rem;color:rgba(255,255,255,.55);letter-spacing:.3px}
+.auth-body{padding:28px 32px 32px}
+.auth-tabs{display:flex;background:var(--g100);border-radius:10px;padding:4px;margin-bottom:24px;gap:4px}
+.auth-tab{flex:1;padding:9px;border:none;background:transparent;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;color:var(--g600);transition:all .2s}
+.auth-tab.active{background:#fff;color:var(--navy);box-shadow:var(--shadow)}
+.auth-form{display:flex;flex-direction:column;gap:14px}
+.auth-form.hidden{display:none}
+.field-group{display:flex;flex-direction:column;gap:5px}
+.field-label{font-size:.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+.field-input{padding:11px 14px;border:2px solid var(--g200);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--navy);outline:none;transition:border-color .2s;background:#fff}
+.field-input:focus{border-color:var(--navy)}
+.field-input.error{border-color:var(--red)}
+.auth-err{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);color:var(--red);border-radius:8px;padding:10px 13px;font-size:.83rem;display:none}
+.auth-err.show{display:block}
+.auth-ok{background:rgba(33,145,80,.08);border:1px solid rgba(33,145,80,.2);color:var(--green);border-radius:8px;padding:10px 13px;font-size:.83rem;display:none}
+.auth-ok.show{display:block}
+.btn-auth{padding:13px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;width:100%;margin-top:4px}
+.btn-auth:hover{background:var(--red);transform:translateY(-1px)}
+.btn-auth:active{transform:translateY(0)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:4px 0}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.auth-divider span{font-size:.75rem;color:var(--g400)}
+.auth-note{font-size:.76rem;color:var(--g400);text-align:center;line-height:1.5;margin-top:6px}
+
+/* ── HEADER USER AREA ── */
+.huser{display:flex;align-items:center;gap:10px}
+.huser-av{width:34px;height:34px;border-radius:50%;background:var(--gold2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--navy);cursor:pointer;flex-shrink:0}
+.huser-name{color:rgba(255,255,255,.8);font-size:.83rem;font-weight:500}
+.btn-logout{padding:5px 13px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.65);border-radius:16px;font-family:'DM Sans',sans-serif;font-size:.75rem;cursor:pointer;transition:all .2s}
+.btn-logout:hover{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.08)}
+
+/* ── STREAK / XP badges ── */
+.xp-bar-wrap{display:flex;align-items:center;gap:10px;margin-top:10px}
+.xp-label{font-size:.75rem;font-weight:700;color:var(--gold);white-space:nowrap}
+.xp-track{flex:1;background:var(--g200);height:6px;border-radius:4px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;transition:width .6s ease}
+.streak-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(212,147,10,.12);border:1px solid rgba(212,147,10,.3);border-radius:16px;padding:4px 12px;font-size:.78rem;font-weight:700;color:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ AUTH OVERLAY ═══════════ -->
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-top">
+      <div class="auth-flag"><div class="fr"></div><div class="fw"></div><div class="fb"></div></div>
+      <div class="auth-logo">Hollandaca <span>İnburgering</span></div>
+      <div class="auth-tagline">A1 → B1 · Türkçe Anlatımlı · İlerleme Kaydedilir</div>
+    </div>
+    <div class="auth-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Giriş Yap</button>
+        <button class="auth-tab" onclick="switchTab('register')">Kayıt Ol</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="auth-form" id="form-login">
+        <div class="auth-err" id="login-err"></div>
+        <div class="field-group">
+          <label class="field-label">Kullanıcı Adı</label>
+          <input class="field-input" id="login-user" type="text" placeholder="kullanıcı adın" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Şifre</label>
+          <input class="field-input" id="login-pass" type="password" placeholder="şifren" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button class="btn-auth" onclick="doLogin()">Giriş Yap →</button>
+        <div class="auth-divider"><span>veya</span></div>
+        <div class="auth-note">Hesabın yok mu? Üstteki "Kayıt Ol" sekmesine tıkla.</div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="auth-form hidden" id="form-register">
+        <div class="auth-err" id="reg-err"></div>
+        <div class="auth-ok" id="reg-ok"></div>
+        <div class="field-group">
+          <label class="field-label">Ad Soyad</label>
+          <input class="field-input" id="reg-name" type="text" placeholder="Adın Soyadın" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Kullanıcı Adı</label>
+          <input class="field-input" id="reg-user" type="text" placeholder="benzersiz kullanıcı adı" autocomplete="username" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Şifre <span style="font-weight:400;text-transform:none;color:var(--g400)">(en az 6 karakter)</span></label>
+          <input class="field-input" id="reg-pass" type="password" placeholder="güçlü bir şifre" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Şifre Tekrar</label>
+          <input class="field-input" id="reg-pass2" type="password" placeholder="şifreyi tekrar gir" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <button class="btn-auth" onclick="doRegister()">Hesap Oluştur →</button>
+        <div class="auth-note">Kaydolarak ilerleme ve quiz sonuçların otomatik kaydedilir.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="logo">
+    <div class="flag"><div class="fr"></div><div class="fw"></div><div class="fb"></div></div>
+    <div class="logo-txt">Hollandaca <span>İnburgering</span></div>
+  </div>
+  <div class="huser" id="huser-area">
+    <div class="streak-badge" id="streak-display">🔥 0 gün</div>
+    <span class="huser-name" id="huser-name"></span>
+    <div class="huser-av" id="huser-av" title="Profil">?</div>
+    <button class="btn-logout" onclick="doLogout()">Çıkış</button>
+  </div>
+</header>
+
+<div class="nav">
+  <button class="nb active" data-sec="dashboard">📊 Panel</button>
+  <button class="nb" data-sec="lessons">📚 Dersler</button>
+  <button class="nb" data-sec="quiz">✍️ Quiz</button>
+  <button class="nb" data-sec="exam">🎓 Sınav Simülatörü</button>
+  <button class="nb" data-sec="plan">📅 Çalışma Planı</button>
+  <button class="nb" data-sec="resources">🔗 Kaynaklar</button>
+  <button class="nb" data-sec="tutor">🤖 AI Tutor</button>
+</div>
+
+<div class="wrap">
+<div>
+
+<!-- ═══════════ DASHBOARD ═══════════ -->
+<div class="sec active" id="sec-dashboard">
+  <div class="stitle">Hoş geldin! 👋</div>
+  <div class="ssub">İnburgering sınavına hazırlık — A1'den B1'e 3 ayda</div>
+  <div class="sgrid">
+    <div class="scard"><div class="snum">0</div><div class="slbl">Öğrenilen Saat</div><div class="ssub2">120 saatin 0'ı</div></div>
+    <div class="scard"><div class="snum">0</div><div class="slbl">Tamamlanan Ders</div><div class="ssub2">16 dersten 0'ı</div></div>
+    <div class="scard"><div class="snum">—</div><div class="slbl">Quiz Ortalaması</div><div class="ssub2">Henüz quiz yok</div></div>
+    <div class="scard"><div class="snum">90</div><div class="slbl">Kalan Gün</div><div class="ssub2">Hedef: 90 gün</div></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Seviye Yolculuğun</div>
+    <div class="csub">A1 → A1+ → A2 → B1 (İnburgering seviyesi)</div>
+    <div class="prow"><div class="phdr"><span>A1 — Başlangıç</span><span style="color:var(--green);font-weight:700">Şu an buradasın</span></div><div class="ptrack"><div class="pfill" style="width:5%;background:linear-gradient(90deg,var(--green),#27ae60)"></div></div></div>
+    <div class="prow"><div class="phdr"><span>A1+ — Temel İletişim</span><span style="color:var(--blue);font-weight:600">0%</span></div><div class="ptrack"><div class="pfill" style="width:0%;background:linear-gradient(90deg,var(--blue),#5dade2)"></div></div></div>
+    <div class="prow"><div class="phdr"><span>A2 — Günlük Yaşam</span><span style="color:var(--gold);font-weight:600">0%</span></div><div class="ptrack"><div class="pfill" style="width:0%;background:linear-gradient(90deg,var(--gold),#f5c842)"></div></div></div>
+    <div class="prow"><div class="phdr"><span>B1 — Sınav Seviyesi</span><span style="color:var(--red);font-weight:600">0%</span></div><div class="ptrack"><div class="pfill" style="width:0%;background:linear-gradient(90deg,var(--red),var(--red2))"></div></div></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">🇹🇷 Türklerin Dikkat Etmesi Gereken Konular</div>
+    <div class="csub">Bu konular Türkçe konuşanlar için özellikle zor olabilir</div>
+    <div style="display:grid;gap:9px">
+      <div style="display:flex;gap:12px;padding:11px 14px;background:rgba(192,57,43,.06);border-radius:10px;border-left:3px solid var(--red)"><span style="font-size:1.1rem">⚠️</span><div><div style="font-weight:700;font-size:.88rem">de / het (belirli artikel)</div><div style="font-size:.8rem;color:var(--g600)">Türkçe'de artikel yok — bu kuralı ezberlemelisin</div></div></div>
+      <div style="display:flex;gap:12px;padding:11px 14px;background:rgba(192,57,43,.06);border-radius:10px;border-left:3px solid var(--red)"><span style="font-size:1.1rem">⚠️</span><div><div style="font-weight:700;font-size:.88rem">G / CH sesi (kelek sesi)</div><div style="font-size:.8rem;color:var(--g600)">Türkçe'de yok — boğaz sesi, Arapça "خ" gibi</div></div></div>
+      <div style="display:flex;gap:12px;padding:11px 14px;background:rgba(192,57,43,.06);border-radius:10px;border-left:3px solid var(--red)"><span style="font-size:1.1rem">⚠️</span><div><div style="font-weight:700;font-size:.88rem">Cümle sırası (V2 kuralı)</div><div style="font-size:.8rem;color:var(--g600)">Türkçe SOV iken Hollandaca SVO — "Ik ga morgen" değil "Morgen ga ik"</div></div></div>
+      <div style="display:flex;gap:12px;padding:11px 14px;background:rgba(192,57,43,.06);border-radius:10px;border-left:3px solid var(--red)"><span style="font-size:1.1rem">⚠️</span><div><div style="font-weight:700;font-size:.88rem">ij / ui / oe sesleri</div><div style="font-size:.8rem;color:var(--g600)">Türkçe'de karşılığı yok — özel ağız eğitimi gerekir</div></div></div>
+      <div style="display:flex;gap:12px;padding:11px 14px;background:rgba(33,145,80,.07);border-radius:10px;border-left:3px solid var(--green)"><span style="font-size:1.1rem">✅</span><div><div style="font-weight:700;font-size:.88rem">Avantajın: düzenli fiil çekimi</div><div style="font-size:.8rem;color:var(--g600)">Hollandaca düzenli fiiller Türkçe gibi kurallı — mantığı öğren, kelimeler gelsin</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Bugün Ne Öğren?</div>
+    <div class="csub">Önerilen başlangıç aktiviteleri (45 dk)</div>
+    <div style="display:grid;gap:10px">
+      <div style="display:flex;align-items:center;gap:14px;padding:12px 15px;background:var(--g100);border-radius:10px">
+        <span style="font-size:1.3rem">🔤</span>
+        <div><div style="font-weight:600;font-size:.88rem">Ders 1: Alfabe & Sesler</div><div style="font-size:.78rem;color:var(--g600)">A1 · 45 dk · Türkçe açıklamalı</div></div>
+        <button onclick="openLesson(0)" style="margin-left:auto;padding:7px 16px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer">Başla</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;padding:12px 15px;background:var(--g100);border-radius:10px">
+        <span style="font-size:1.3rem">👋</span>
+        <div><div style="font-weight:600;font-size:.88rem">Ders 2: Selamlaşma</div><div style="font-size:.78rem;color:var(--g600)">A1 · 40 dk · İlk konuşmalar</div></div>
+        <button onclick="openLesson(1)" style="margin-left:auto;padding:7px 16px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer">Başla</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LESSONS ═══════════ -->
+<div class="sec" id="sec-lessons">
+  <div class="stitle">Dersler 📚</div>
+  <div class="ssub">A1'den B1'e — 16 ders, Türkçe açıklamalarla</div>
+  <div class="levelrow">
+    <button class="ltag a1 active" onclick="filterLessons('all')">Tümü</button>
+    <button class="ltag a1" onclick="filterLessons('A1')">🟢 A1</button>
+    <button class="ltag a1plus" onclick="filterLessons('A1+')">🔵 A1+</button>
+    <button class="ltag a2" onclick="filterLessons('A2')">🟡 A2</button>
+    <button class="ltag b1" onclick="filterLessons('B1')">🔴 B1</button>
+  </div>
+  <div class="lgrid" id="lesson-grid"></div>
+</div>
+
+<!-- ═══════════ QUIZ ═══════════ -->
+<div class="sec" id="sec-quiz">
+  <div class="stitle">Quiz ✍️</div>
+  <div class="ssub">Her cevabın altında Türkçe açıklama var</div>
+  <div class="qwrap" id="quiz-container"></div>
+</div>
+
+<!-- ═══════════ EXAM ═══════════ -->
+<div class="sec" id="sec-exam">
+  <div class="stitle">Sınav Simülatörü 🎓</div>
+  <div class="ssub">Gerçek İnburgering sınavı formatında — 50 soru, 90 dakika</div>
+  <div id="exam-s">
+    <div class="estart">
+      <div class="eemoji">🎓</div>
+      <div class="etitle">İnburgering Deneme Sınavı</div>
+      <div class="edesc">Dil, kültür ve Hollanda toplumu hakkında 50 soru. Geçme notu: %75. Gerçek sınav formatında.</div>
+      <div class="eigrid">
+        <div class="eiitem"><div class="einum">50</div><div class="eilbl">Soru</div></div>
+        <div class="eiitem"><div class="einum">90</div><div class="eilbl">Dakika</div></div>
+        <div class="eiitem"><div class="einum">%75</div><div class="eilbl">Geçme notu</div></div>
+      </div>
+      <button class="btnstart" onclick="startExam()">Sınavı Başlat</button>
+    </div>
+  </div>
+  <div id="exam-a" style="display:none">
+    <div class="ebar"><div style="font-size:.88rem;font-weight:600">Soru <span id="eqnum">1</span> / 50</div><div class="etimer" id="etimer">90:00</div></div>
+    <div id="eq-wrap" class="qwrap" style="max-width:100%"></div>
+    <div style="display:flex;gap:9px;margin-top:14px">
+      <button id="eprev" class="btnchk" style="background:var(--g400);display:none" onclick="ePrev()">← Önceki</button>
+      <button id="enext" class="btnchk" onclick="eNext()">Sonraki →</button>
+    </div>
+  </div>
+  <div id="exam-r" style="display:none">
+    <div class="scorecard" style="max-width:480px">
+      <div style="font-size:2.8rem;margin-bottom:12px" id="eremoji">🎉</div>
+      <div class="bigscore" id="erscore">82%</div>
+      <div style="font-size:.88rem;color:var(--g600);margin-top:5px;margin-bottom:18px" id="erlabel"></div>
+      <div id="erbreak" style="background:var(--g100);border-radius:10px;padding:16px;margin-bottom:18px;text-align:left;font-size:.85rem;line-height:1.9"></div>
+      <button class="btnstart" onclick="resetExam()">Tekrar Dene</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ STUDY PLAN ═══════════ -->
+<div class="sec" id="sec-plan">
+  <div class="stitle">3 Aylık Çalışma Planı 📅</div>
+  <div class="ssub">Haftada 6–10 saat · Toplam ~120 saat · Türk öğrenciler için optimize edildi</div>
+
+  <div class="planmonth">
+    <div class="pmtitle">🟢 1. Ay — A1 Temeli (Hafta 1–4)</div>
+    <div class="pmsub">Sıfırdan başlıyoruz — alfabe, sesler, temel kelimeler ve ilk cümleler</div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 1 — Alfabe, Sesler ve Selamlaşma</div>
+      <ul class="pitems">
+        <li>Hollanda alfabesini öğren — 26 harf, Türkçe'den farklı sesler</li>
+        <li class="trfocus">Türkçe'de olmayan sesler: G/CH (boğaz), IJ, UI, OE, EU</li>
+        <li>Temel selamlaşmalar: Goedemorgen, Hoi, Doei, Dank je</li>
+        <li>Kendini tanıt: Ik heet... / Ik kom uit Turkije / Ik woon in...</li>
+        <li>1'den 20'ye kadar sayılar</li>
+        <li>Günlük hedef: Easy Dutch YouTube'dan 1 video</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 2 — Sayılar, Renkler ve Aile</div>
+      <ul class="pitems">
+        <li>Sayılar 1–1.000 (tweeduizend, honderd — dikkat: binler için "duizend")</li>
+        <li>Renkler: rood, blauw, groen, wit, zwart, geel, oranje</li>
+        <li>Aile kelimeleri: moeder/vader (anne/baba), broer/zus (kardeş)</li>
+        <li class="trfocus">de / het kuralı: Türkçe'de artikel yok — her kelimeyle birlikte öğren</li>
+        <li>İlk fiiller: zijn (olmak), hebben (sahip olmak), gaan (gitmek)</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 3 — Temel Gramer: Fiil Çekimi</div>
+      <ul class="pitems">
+        <li>Şimdiki zaman (tegenwoordige tijd): ik werk, jij werkt, hij werkt</li>
+        <li class="trfocus">V2 kuralı: Cümle her zaman fiil 2. sıradadır — Türkçe gibi değil!</li>
+        <li>Soru cümleleri: Hoe? Wat? Waar? Wanneer? Wie?</li>
+        <li>Olumsuz cümleler: niet (fiil olumsuz) / geen (isim olumsuz)</li>
+        <li>10 düzenli fiil ezberle: werken, wonen, eten, drinken, lopen...</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 4 — Günlük Yaşam: Alışveriş ve Yemek</div>
+      <ul class="pitems">
+        <li>Süpermarket ve bakkalda alışveriş — fiyat sormak, ödemek</li>
+        <li>Yiyecek ve içecekler: brood, kaas, melk, koffie, thee</li>
+        <li>Miktarlar: een kilo, een liter, twee stuks, een pak</li>
+        <li>İlk pratik sınav: A1 konuları</li>
+      </ul>
+    </div>
+    <div class="schbox">
+      <h5>⏱ Günlük Program (60 dk)</h5>
+      <div class="schrow"><div class="scht">15 dk</div><div>Kelime tekrarı (Anki flashcard — günlük 10 yeni kelime)</div></div>
+      <div class="schrow"><div class="scht">20 dk</div><div>Ders materyali oku veya video izle</div></div>
+      <div class="schrow"><div class="scht">15 dk</div><div>Yazma alıştırması veya gramer</div></div>
+      <div class="schrow"><div class="scht">10 dk</div><div>Yüksek sesle konuş — ses kaydı al ve dinle</div></div>
+    </div>
+  </div>
+
+  <div class="planmonth m2">
+    <div class="pmtitle">🔵 2. Ay — A1+ / A2 Geliştirme (Hafta 5–8)</div>
+    <div class="pmsub">Geçmiş zaman, dinleme, okuma ve Hollanda kültürü</div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 5 — Geçmiş Zaman (Verleden Tijd)</div>
+      <ul class="pitems">
+        <li>Basit geçmiş: werkte, woonde, ging (düzenli ve düzensiz)</li>
+        <li class="trfocus">"hebben" mi "zijn" mi? — hareket fiilleri "zijn" alır (Türkçe'de böyle ayrım yok)</li>
+        <li>Geçmiş anlatım: "Ik was geboren in...", "Ik heb geleerd..."</li>
+        <li>Zaman kelimeleri: gisteren, vorige week, twee jaar geleden</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 6 — Dinleme ve Telefon Konuşmaları</div>
+      <ul class="pitems">
+        <li>Belediye, doktor, iş yeri telefonları</li>
+        <li>Hollanda'da sağlık sistemi: huisarts (aile doktoru) ilk başvuru noktası</li>
+        <li>Randevu almak: "Ik wil een afspraak maken"</li>
+        <li>Hollandacalılar hızlı konuşur — strateji: anahtar kelimelere odaklan</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 7 — Okuma ve Resmi Yazışmalar</div>
+      <ul class="pitems">
+        <li>Belediye mektupları ve formları okumak</li>
+        <li>Resmi mektup yazmak: "Geachte mevrouw...", "Met vriendelijke groet"</li>
+        <li>BSN, DUO, IND — Hollanda'daki önemli kurumlar</li>
+        <li>Kira sözleşmesi, sigorta formu gibi belgeleri anlamak</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 8 — Hollanda Kültürü ve KNM</div>
+      <ul class="pitems">
+        <li>Devlet yapısı: Kral, Bakanlar Kurulu, Tweede Kamer (150 sandalye)</li>
+        <li>Önemli günler: Koningsdag (27 Nisan), Bevrijdingsdag (5 Mayıs)</li>
+        <li>Hollanda değerleri: doğrudan iletişim, eşitlik, "doe maar gewoon"</li>
+        <li class="trfocus">Türk-Hollanda farkı: Hollandalılar çok doğrudan konuşur — bu nezaketsizlik değil!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="planmonth m3">
+    <div class="pmtitle">🔴 3. Ay — B1 Sınav Hazırlığı (Hafta 9–12)</div>
+    <div class="pmsub">Tam deneme sınavları, zayıf noktaları güçlendir, özgüven kazan</div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 9 — Karmaşık Gramer ve ONA</div>
+      <ul class="pitems">
+        <li>Yan cümleler: "omdat" (çünkü), "dat" (ki), "als" (eğer), "terwijl" (iken)</li>
+        <li class="trfocus">Yan cümlede fiil sona gider — Türkçe gibi! Bu avantajın.</li>
+        <li>ONA sınavı: Hollanda iş hayatı, haklar, CV yazımı, sözleşme</li>
+        <li>Ayrılabilen fiiller: opbellen → ik bel op, aankomen → ik kom aan</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 10 — Deneme Sınavları</div>
+      <ul class="pitems">
+        <li>2× tam deneme sınavı (50 soru, 90 dk)</li>
+        <li>Yanlış cevapları analiz et — hangi konu zayıf?</li>
+        <li>B1 seviyesi resmi kelimeler: verzoek, besluit, aanvraag, bezwaar</li>
+        <li>Konuşma kaydı yap — kendini bir Hollandalı gibi dinle</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 11 — Sözlü Beceri ve Rol Yapma</div>
+      <ul class="pitems">
+        <li>KNM senaryoları: belediyeye gitme, banka, sigorta</li>
+        <li>İş başvurusu (ONA): "Vertel iets over uzelf" — kendini tanıt</li>
+        <li>Tandem partner veya dil koçu bul — canlı konuşma şart</li>
+        <li class="trfocus">Hollandalı arkadaş bul — onlar seni düzeltsin, mahcup olma!</li>
+      </ul>
+    </div>
+    <div class="pwk">
+      <div class="pwktitle">Hafta 12 — Final ve Özgüven</div>
+      <ul class="pitems">
+        <li>3× tam deneme sınavı — her seferinde %75 üzeri hedefle</li>
+        <li>Sınav günü hazırlığı: kimlik, yer, saat</li>
+        <li>Uyku, beslenme — sınav öncesi gece erken uyu</li>
+        <li>Hazırsın — güven kendine! Başardın 💪</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ RESOURCES ═══════════ -->
+<div class="sec" id="sec-resources">
+  <div class="stitle">Kaynaklar 🔗</div>
+  <div class="ssub">Türk öğrenciler için en iyi kaynaklar</div>
+  <div class="rescat">
+    <div class="rctitle">🏛️ Resmi Kaynaklar</div>
+    <div class="resitem"><div class="rico">🏛️</div><div><div class="rname">inburgeren.nl (DUO)</div><div class="rdesc">Resmi inburgering bilgileri, sınav tarihleri ve başvuru. Başvuruyu buradan yap.</div></div></div>
+    <div class="resitem"><div class="rico">📋</div><div><div class="rname">NT2.nl</div><div class="rdesc">Ücretsiz NT2 (tweede taal) alıştırmaları — sınav formatına özel.</div></div></div>
+    <div class="resitem"><div class="rico">📘</div><div><div class="rname">"Welkom in Nederland" kitabı</div><div class="rdesc">KNM sınavı için zorunlu başucu kitabı — Hollanda toplumu, kültür, devlet yapısı.</div></div></div>
+  </div>
+  <div class="rescat">
+    <div class="rctitle">🎬 Video ve Dinleme</div>
+    <div class="resitem"><div class="rico">▶️</div><div><div class="rname">Easy Dutch (YouTube)</div><div class="rdesc">Sokak röportajları — Hollandaca ve İngilizce altyazılı. A2+ için ideal, gerçek konuşma dili.</div></div></div>
+    <div class="resitem"><div class="rico">📰</div><div><div class="rname">NOS Nieuws in Eenvoudig Nederlands</div><div class="rdesc">Basit Hollandacayla haberler — sınav metnine çok benzer. Günlük 1 haber oku.</div></div></div>
+    <div class="resitem"><div class="rico">🎙️</div><div><div class="rname">Oefenen.nl</div><div class="rdesc">Dinleme ve konuşma alıştırmaları — inburgering sınavına özel.</div></div></div>
+  </div>
+  <div class="rescat">
+    <div class="rctitle">📱 Uygulamalar</div>
+    <div class="resitem"><div class="rico">🔁</div><div><div class="rname">Anki (ücretsiz)</div><div class="rdesc">Spaced repetition ile kelime kartları. "NT2 Dutch" destesi indir — günde 15 dk yeterli.</div></div></div>
+    <div class="resitem"><div class="rico">🦜</div><div><div class="rname">Duolingo — Hollandaca</div><div class="rdesc">Oyunlaştırılmış kelime ve cümle alıştırmaları. A1–A2 için çok iyi, günlük alışkanlık için.</div></div></div>
+    <div class="resitem"><div class="rico">💬</div><div><div class="rname">Tandem / HelloTalk</div><div class="rdesc">Hollandalı dil partneri bul — sen Türkçe öğret, o Hollandaca. En iyi konuşma pratiği!</div></div></div>
+  </div>
+  <div class="rescat">
+    <div class="rctitle">🇹🇷 Türkçe Kaynak</div>
+    <div class="resitem"><div class="rico">👥</div><div><div class="rname">Hollanda'daki Türkler Facebook Grupları</div><div class="rdesc">Hollanda'da yaşayan Türkler deneyim paylaşıyor — inburgering ipuçları, sınav deneyimleri.</div></div></div>
+    <div class="resitem"><div class="rico">🏫</div><div><div class="rname">ROC (Regionaal Opleidingscentrum)</div><div class="rdesc">Yaşadığın belediyedeki ücretsiz veya uygun fiyatlı dil kursları. Belediyenden sor!</div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════ AI TUTOR ═══════════ -->
+<div class="sec" id="sec-tutor">
+  <div class="stitle">AI Tutor — Jan 🤖</div>
+  <div class="ssub">Türkçe veya Hollandaca sor — hem dilde cevap verir</div>
+  <div style="background:#fff;border-radius:var(--r);border:1px solid var(--g200);box-shadow:var(--shadow);overflow:hidden">
+    <div class="tuthdr">
+      <div class="tutav">🧑‍🏫</div>
+      <div class="tutinfo">
+        <div class="tutname">Jan — Türkçe Bilen Hollandaca Öğretmeni</div>
+        <div class="tutstatus"><span class="tutdot"></span>Online · Türkçe & Hollandaca</div>
+      </div>
+    </div>
+    <div class="chatarea" id="chat-area">
+      <div class="msg msg-t">
+        Merhaba! Ben Jan, senin Hollandaca öğretmeninim. 👋<br><br>
+        <strong>Türkçe</strong> veya <strong>Hollandaca</strong> soru sorabilirsin — her ikisinde de cevap veririm!<br><br>
+        Gramer, kelime, telaffuz, KNM kültürü, ONA iş hayatı veya sınav hakkında her şeyi sorabilirsin. Özellikle Türk öğrencilerin zorlandığı konularda özel açıklama yaparım. 🇹🇷→🇳🇱
+      </div>
+    </div>
+    <div class="qprompts" id="qprompts">
+      <button class="qpbtn" onclick="sendQ('de ve het nasıl kullanılır? Türkçe açıkla')">de / het kuralı</button>
+      <button class="qpbtn" onclick="sendQ('G harfinin telaffuzu nasıl? Türkçeye göre açıkla')">G sesi telaffuzu</button>
+      <button class="qpbtn" onclick="sendQ('Hollandacada geçmiş zaman nasıl yapılır?')">Geçmiş zaman</button>
+      <button class="qpbtn" onclick="sendQ('İnburgering sınavının bölümleri nelerdir?')">Sınav bölümleri</button>
+      <button class="qpbtn" onclick="sendQ('V2 kuralını Türkçe öğrenciye nasıl açıklarsın?')">V2 kuralı</button>
+      <button class="qpbtn" onclick="sendQ('Hollanda kültürü hakkında Türklerle fark nedir?')">Kültür farkı</button>
+      <button class="qpbtn" onclick="sendQ('Günlük 10 faydalı cümle ver')">10 Faydalı Cümle</button>
+    </div>
+    <div class="cinputrow">
+      <input class="cinput" id="cinput" placeholder="Türkçe veya Hollandaca yaz... (soru, kelime, gramer)" onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="btnsend" onclick="sendMsg()">Gönder</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end content -->
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sbcard">
+    <h4>🏆 Kilometre Taşları</h4>
+    <div class="mrow"><div class="mico done">✓</div><div class="mtxt">Platforma kayıt oldum</div></div>
+    <div class="mrow"><div class="mico todo">2</div><div class="mtxt todo">İlk dersi tamamla</div></div>
+    <div class="mrow"><div class="mico todo">3</div><div class="mtxt todo">50 kelime öğren</div></div>
+    <div class="mrow"><div class="mico todo">4</div><div class="mtxt todo">İlk quizi geç</div></div>
+    <div class="mrow"><div class="mico todo">5</div><div class="mtxt todo">Deneme sınavı yap</div></div>
+    <div class="mrow"><div class="mico todo">6</div><div class="mtxt todo">%80 quiz ortalaması</div></div>
+    <div class="mrow"><div class="mico todo">7</div><div class="mtxt todo">Tüm dersleri bitir</div></div>
+  </div>
+  <div class="sbcard" style="background:var(--navy);border-color:var(--navy)">
+    <h4 style="color:var(--gold2)">🇹🇷 Türk Öğrenci İpuçları</h4>
+    <div style="font-size:.82rem;line-height:1.8;color:rgba(255,255,255,.85)">
+      <div style="margin-bottom:7px">✓ Yan cümlede fiil sona — Türkçe gibi!</div>
+      <div style="margin-bottom:7px">⚠️ "de/het" her kelimeyle ezberle</div>
+      <div style="margin-bottom:7px">🎤 G sesini boğazdan söyle</div>
+      <div style="margin-bottom:7px">📺 Easy Dutch YouTube'u sev</div>
+      <div>💬 Hollandalı arkadaş bul</div>
+    </div>
+  </div>
+  <div class="sbcard">
+    <h4>🎯 Sınav Bilgisi</h4>
+    <div style="font-size:.82rem;line-height:2;color:var(--g600)">
+      <div><strong style="color:var(--navy)">Bölümler:</strong> KNM, ONA, Taal</div>
+      <div><strong style="color:var(--navy)">Süre:</strong> 90 dakika</div>
+      <div><strong style="color:var(--navy)">Sorular:</strong> 50 çok şıklı</div>
+      <div><strong style="color:var(--navy)">Geçme:</strong> %75 (37,5/50)</div>
+      <div><strong style="color:var(--navy)">Ücret:</strong> €350 (toplam)</div>
+      <div><strong style="color:var(--navy)">Başvuru:</strong> DUO.nl</div>
+    </div>
+  </div>
+  <div class="sbcard">
+    <h4>📆 Haftalık Plan</h4>
+    <div style="font-size:.82rem;color:var(--g600);line-height:2.1">
+      <div style="display:flex;justify-content:space-between"><span>Pzt</span><span style="color:var(--green);font-weight:600">Gramer</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Sal</span><span style="color:var(--blue);font-weight:600">Kelime</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Çar</span><span style="color:var(--gold);font-weight:600">Dinleme</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Per</span><span style="color:var(--green);font-weight:600">Okuma</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Cum</span><span style="color:var(--red);font-weight:600">Quiz + Tekrar</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Cmt</span><span style="color:var(--navy);font-weight:600">Kültür (KNM)</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Paz</span><span style="color:var(--g400)">Serbest / Dinlen</span></div>
+    </div>
+  </div>
+</div>
+</div><!-- end wrap -->
+
+<!-- LESSON MODAL -->
+<div class="mover" id="lmodal"><div class="modal" id="mcontnt"></div></div>
+
+<script>
+// ═══════════ LESSON DATA ═══════════
+const LESSONS = [
+  {
+    id:0, title:"Alfabe & Sesler", level:"A1", lhdr:"a1c", time:"45 dk", status:"unlocked",
+    desc:"Hollanda alfabesi ve Türkçe'den farklı sesler — G, IJ, UI, OE, EU seslerini öğren.",
+    content:{
+      intro:"Hollanda alfabesi 26 harften oluşur. Türkçe'deki Ç, Ş, Ğ, Ö, Ü harfleri yok — ama farklı sesler var. En zoru G/CH sesi ve IJ/UI ünlüleri.",
+      trNote:"🇹🇷 Türkçe ipucu: Hollandaca'da büyük harf kullanımı Türkçe gibi — cümle başı ve özel isimler. Harf isimleri farklı ama alfabe düzeni aynı.",
+      vocab:[
+        ["A, B, C, D, E","","[aː, beː, seː, deː, eː] — Türkçe gibi söylenir"],
+        ["F, G, H, I, J","","G = boğaz sesi! H = İngilizce 'h'. J = Türkçe 'y' gibi"],
+        ["K, L, M, N, O","","[kaː, ɛl, ɛm, ɛn, oː] — büyük harf isimleri"],
+        ["P, Q, R, S, T","","R = uvular (boğaz titreyerek). Q ve X nadiren kullanılır"],
+        ["U, V, W, X, Y, Z","","W = Türkçe'deki 'v' gibi ama dudakla. V = dişle dudak arası"],
+        ["IJ (ij)","[ɛi]","= 'ey' sesi — zijn, wijn, fijn. Türkçe'de yok!"],
+        ["UI (ui)","[œy]","Türkçe'de karşılığı yok — huis, uit, buiten"],
+        ["OE (oe)","[u:]","= Türkçe 'u' gibi uzun — boek, groep, moe"],
+        ["EU (eu)","[øː]","= Fransızca 'eu' — neus, deur, leuk. Türkçe'de yok"],
+        ["AA (aa)","[aː]","= Uzun 'a' — praten, naam, straat"],
+        ["G / CH","[ɣ/x]","BOĞAZ SESİ — Türkçe yok! Arapça 'خ' gibi düşün"],
+        ["SCH","[sx]","= 's' + boğaz sesi — school, schip"]
+      ],
+      dialogues:[
+        {title:"Alfabe şarkısı ile pratik",lines:[
+          {p:"A-B-C",d:"aː - beː - seː",tr:"'a-be-ce' — İngilizce ABC'den farklı!"},
+          {p:"D-E-F-G",d:"deː - eː - ɛf - ɣeː",tr:"G harfini 'geh' değil 'ğeh' gibi — boğazdan"},
+          {p:"IJ / Y",d:"ɛi / ei",tr:"IJ = Hollandaca'ya özgü — 'ey' der gibi"},
+          {p:"W / V",d:"ʋeː / veː",tr:"W = yumuşak, dudak-diş arası — 'w' değil 'v'ye yakın"},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Büyük/Küçük Harf:</strong> Hollandaca'da cümle başı ve özel isimler büyük — tıpkı Türkçe gibi. Aylar ve günler küçük harfle: maandag, januari."},
+        {type:"tr",rule:"<strong>🇹🇷 Türk Öğrenciye Not — G Sesi:</strong> Bu sesin Türkçe karşılığı yok. Boğazından 'h' ile 'k' arası bir ses çıkar. Arapça biliyorsan 'خ' (hâ) gibi düşün. Kelimelerde pratik yap: <em>gaan, goed, groot, groen</em>"}
+      ]
+    }
+  },
+  {
+    id:1, title:"Selamlaşma & Tanışma", level:"A1", lhdr:"a1c", time:"40 dk", status:"unlocked",
+    desc:"İlk konuşmalar — merhaba, hoşça kal, kendini tanıtma. Türkçe karşılıklarla.",
+    content:{
+      intro:"Hollandaca'da resmi (formeel) ve gayri resmi (informeel) selamlama farkı önemlidir. 'U' resmi, 'je/jij' gayri resmi.",
+      trNote:"🇹🇷 Türkçe ipucu: 'Goedemorgen' = İyi sabahlar, 'Goedemiddag' = İyi günler, 'Goedenavond' = İyi akşamlar. Türkçe gibi gün bölümlerine göre selamlama var!",
+      vocab:[
+        ["Goedemorgen","[ɣudəˈmɔrɣə]","İyi sabahlar — sabah selamı"],
+        ["Goedemiddag","[ɣudəˈmɪdɑx]","İyi günler — öğleden sonra"],
+        ["Goedenavond","[ɣudənˈaːvɔnt]","İyi akşamlar"],
+        ["Hallo / Hoi","[hɑloː / hɔi]","Merhaba (resmi / gayri resmi)"],
+        ["Doei / Dag / Tot ziens","","Görüşürüz / Hoşça kal (resmiden az resmiye)"],
+        ["Hoe gaat het?","[hu ɣaːt ɦɛt]","Nasılsın? / Nasılsınız?"],
+        ["Goed, dank je","","İyiyim, teşekkürler"],
+        ["Ik heet...","[ɪk heːt]","Benim adım... (Türkçe: 'Adım...')"],
+        ["Hoe heet u/jij?","","Adınız ne? (resmi/gayri resmi)"],
+        ["Ik kom uit Turkije","","Türkiye'den geliyorum"],
+        ["Ik woon in Amsterdam","","Amsterdam'da yaşıyorum"],
+        ["Aangenaam","[ˌaŋɣəˈnaːm]","Memnun oldum"],
+        ["Alstublieft","[ɑlstybliːft]","Lütfen / Buyurun (resmi)"],
+        ["Alsjeblieft","","Lütfen (gayri resmi)"],
+        ["Dank u wel / Dank je","","Teşekkür ederim (resmi / gayri resmi)"],
+      ],
+      dialogues:[
+        {title:"Resmi tanışma (iş yerinde)",lines:[
+          {p:"Anna",d:"Goedemorgen. Hoe gaat het met u?",tr:"İyi sabahlar. Nasılsınız?"},
+          {p:"Mehmet",d:"Goed, dank u wel. En met u?",tr:"İyiyim, teşekkür ederim. Ya siz?"},
+          {p:"Anna",d:"Uitstekend. Ik ben Anna de Vries.",tr:"Mükemmel. Ben Anna de Vries."},
+          {p:"Mehmet",d:"Aangenaam. Ik heet Mehmet Yıldız. Ik kom uit Turkije.",tr:"Memnun oldum. Benim adım Mehmet Yıldız. Türkiye'den geliyorum."},
+        ]},
+        {title:"Gayri resmi tanışma (komşu, arkadaş)",lines:[
+          {p:"Lisa",d:"Hoi! Ik ben Lisa. Hoe heet jij?",tr:"Merhaba! Ben Lisa. Senin adın ne?"},
+          {p:"Ayşe",d:"Hoi Lisa! Ik heet Ayşe. Ik woon hier pas twee maanden.",tr:"Merhaba Lisa! Benim adım Ayşe. Burada henüz iki aydır yaşıyorum."},
+          {p:"Lisa",d:"Welkom in Nederland! Hoe gaat het?",tr:"Hollanda'ya hoş geldin! Nasılsın?"},
+          {p:"Ayşe",d:"Goed hoor! Dank je. Tot later!",tr:"İyiyim! Teşekkürler. Görüşürüz!"},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>U (resmi) vs. Je/Jij (gayri resmi):</strong> Türkçe'deki 'siz' ve 'sen' gibi düşün. U = büyüklere, yabancılara, iş ortamında. Je/Jij = arkadaşlara, çocuklara, yaşıtlara."},
+        {type:"tr",rule:"<strong>🇹🇷 Türkçe Benzerlik:</strong> 'Ik heet Mehmet' = 'Adım Mehmet'. 'Ik kom uit Turkije' = 'Türkiye'denim'. 'Ik woon in Amsterdam' = 'Amsterdam'da yaşıyorum'. Fiil düzeni farklı ama mantık aynı!"}
+      ]
+    }
+  },
+  {
+    id:2, title:"Sayılar, Renkler & Aile", level:"A1", lhdr:"a1c", time:"50 dk", status:"unlocked",
+    desc:"1'den 1.000'e sayılar, renkler ve aile kelimeleri — temel kelime hazinesi.",
+    content:{
+      intro:"Hollandaca sayılar mantıklı ve düzenlidir. 1-20 ezbere, sonrası kuralla öğrenilir. Renkler ve aile kelimeleri her gün lazım.",
+      trNote:"🇹🇷 Dikkat: Hollandaca'da 'elf' (11), 'twaalf' (12) gibi özel isimler var — Türkçe gibi 'on bir' demiyorlar. 21 = 'eenentwintig' (bir-ve-yirmi — Türkçe'nin tersi!)",
+      vocab:[
+        ["een, twee, drie, vier","","1, 2, 3, 4"],
+        ["vijf, zes, zeven, acht","","5, 6, 7, 8"],
+        ["negen, tien","","9, 10"],
+        ["elf, twaalf, dertien","","11, 12, 13"],
+        ["veertien...twintig","","14...20"],
+        ["eenentwintig (21)","","een (1) + en + twintig (20) — Türkçe'nin tersi: önce birler!"],
+        ["honderd / duizend","","100 / 1.000"],
+        ["rood / blauw / groen","","kırmızı / mavi / yeşil"],
+        ["wit / zwart / geel / oranje","","beyaz / siyah / sarı / turuncu"],
+        ["de moeder / de vader","","anne / baba (de-woord)"],
+        ["de broer / de zus","","erkek kardeş / kız kardeş"],
+        ["de opa / de oma","","büyükbaba / büyükanne"],
+        ["de man / de vrouw","","koca / karı (veya: erkek / kadın)"],
+        ["het kind / de kinderen","","çocuk / çocuklar"],
+        ["de familie","","aile"],
+      ],
+      dialogues:[
+        {title:"Aile tanıtımı",lines:[
+          {p:"Fatma",d:"Ik heb een grote familie. Mijn vader heet Ali en mijn moeder heet Zeynep.",tr:"Büyük bir ailem var. Babam Ali, annem Zeynep."},
+          {p:"Fatma",d:"Ik heb twee broers en één zus.",tr:"İki erkek kardeşim ve bir kız kardeşim var."},
+          {p:"Jan",d:"Hoe oud zijn jouw broers?",tr:"Kardeşlerin kaç yaşında?"},
+          {p:"Fatma",d:"Mijn broers zijn twintig en drieëntwintig jaar oud.",tr:"Kardeşlerim yirmi ve yirmi üç yaşında."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Hollandaca Sayı Düzeni:</strong> 21 = eenentwintig (1+20), 34 = vierendertig (4+30). ÖNCE birler, SONRA onlar. Türkçe'nin tam tersi! (Türkçe: yirmi bir, Hollandaca: een-en-twintig)"},
+        {type:"tr",rule:"<strong>🇹🇷 Önemli Fark:</strong> Sayılarda düzen ters! Türkçe 'yirmi bir' derken Hollandaca 'eenentwintig' = 'bir-ve-yirmi' der. Bu hatayı çok yaparsın, dikkat!"}
+      ]
+    }
+  },
+  {
+    id:3, title:"Temel Gramer: Fiiller & Cümle", level:"A1", lhdr:"a1c", time:"75 dk", status:"unlocked",
+    desc:"Hollandaca gramerinin temeli — de/het, fiil çekimi ve V2 kuralı. Türkçe karşılaştırmalı.",
+    content:{
+      intro:"Bu ders biraz karmaşık ama çok önemli. de/het ve V2 kuralı — Türkçe konuşanlar için en zor konular. Ama mantığını anlayınca kolaylaşır.",
+      trNote:"🇹🇷 İyi haber: Hollandaca düzenli fiil çekimi Türkçe gibi kurallı — mantığı öğrenince fiilleri kendin çekebilirsin!",
+      vocab:[
+        ["de (ortak cins)","","Kelimelerin ~%75'i — 'the' (eril+dişil)"],
+        ["het (nötr)","","~%25'i + TÜM küçültmeler (-je)"],
+        ["een","","bir (belirsiz artikel) — Türkçe'deki 'bir' gibi"],
+        ["dit/dat","","bu/şu-o (het kelimeler için)"],
+        ["deze/die","","bu/şu-o (de kelimeler için)"],
+        ["Ik werk","","Ben çalışıyorum (gövde = werk)"],
+        ["Jij/je werkt","","Sen çalışıyorsun (gövde + t)"],
+        ["Hij/zij/het werkt","","O çalışıyor (gövde + t)"],
+        ["Wij/we werken","","Biz çalışıyoruz (mastar = infinitief)"],
+        ["Jullie werken","","Siz çalışıyorsunuz"],
+        ["Zij/ze werken","","Onlar çalışıyorlar"],
+        ["niet","","değil (fiil ve sıfat olumsuzlama)"],
+        ["geen","","hiç yok / -sız (isim olumsuzlama)"],
+        ["de man / het kind","","de erkek / het çocuk"],
+        ["Ik ga morgen — Morgen ga ik","","Ben yarın gidiyorum — V2 kuralı!"],
+      ],
+      dialogues:[
+        {title:"V2 kuralı örnekleri",lines:[
+          {p:"Normal sıra",d:"Ik werk morgen thuis.",tr:"Yarın evden çalışıyorum. (Ik = 1, werk = 2)"},
+          {p:"Zaman önde",d:"Morgen werk ik thuis.",tr:"Yarın evden çalışıyorum. (Morgen = 1, werk = 2) — fiil yine 2.!"},
+          {p:"Soru",d:"Werk jij morgen thuis?",tr:"Yarın evden mi çalışıyorsun? (fiil 1. sıraya geçer)"},
+          {p:"Olumsuz",d:"Ik werk morgen niet.",tr:"Yarın çalışmıyorum. (niet sona gider)"},
+        ]},
+        {title:"de / het örnekleri",lines:[
+          {p:"de-kelimeleri",d:"de man, de vrouw, de dag, de fiets, de auto",tr:"erkek, kadın, gün, bisiklet, araba"},
+          {p:"het-kelimeleri",d:"het kind, het huis, het land, het boek, het water",tr:"çocuk, ev, ülke, kitap, su"},
+          {p:"Küçültmeler",d:"het mannetje, het huisje, het autootje",tr:"HEPSI het! (-je, -tje, -pje ile biter)"},
+          {p:"Çoğul",d:"de mannen, de vrouwen, de kinderen, de huizen",tr:"Çoğul HER ZAMAN de! (tekil ne olursa olsun)"},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Fiil Çekimi (Tegenwoordige Tijd):</strong> Gövde = mastar − en → werken → werk. Ben: gövde (werk). Sen/O: gövde+t (werkt). Biz/Siz/Onlar: mastar (werken). <em>Dikkat: Gövde 't' ile biterse ikinci 't' ekleme!</em>"},
+        {type:"g",rule:"<strong>V2 Kuralı:</strong> Ana cümlede FİİL HER ZAMAN 2. sıradadır. Cümle başında ne olursa olsun (zaman, yer, konu) — fiil 2. konumda kalır. 'Gisteren werkte ik.' (Dün 2.→ çalıştım)"},
+        {type:"tr",rule:"<strong>🇹🇷 de/het için Strateji:</strong> Türkçe'de artikel yok — bu yüzden çok zor! Strateji: Her kelimeyi artikeliyle ezberle. 'huis' değil 'het huis'. Küçültmeler (-je) HEP het. Çoğul HEP de."},
+        {type:"tr",rule:"<strong>🇹🇷 V2 vs Türkçe SOV:</strong> Türkçe = Özne + Nesne + Fiil (Ben seni seviyorum). Hollandaca = Özne + Fiil + Nesne (Ik hou van jou). Bu büyük fark! Ama bir avantaj: yan cümlede fiil sona gider — tıpkı Türkçe gibi!"}
+      ]
+    }
+  },
+  {
+    id:4, title:"Günlük Yaşam & Alışveriş", level:"A1+", lhdr:"a1plus", time:"55 dk", status:"unlocked",
+    desc:"Süpermarket, bakkal, kafe — Hollanda'da hayatta kalmanın dil araçları.",
+    content:{
+      intro:"Hollanda'da hayatın merkezinde 'Albert Heijn' (AH) ve fietsler (bisikletler) var. Alışveriş Hollandacası pratik ve çabuk öğrenilir.",
+      trNote:"🇹🇷 Türkçe ipucu: Hollandaca'da 'Mag ik...?' = 'Alabilir miyim?' — tıpkı Türkçe'deki kibarca istek gibi. 'Kunt u...?' = 'Yapabilir misiniz?' — çok kibar istek.",
+      vocab:[
+        ["Mag ik...?","","Alabilir miyim? / İstiyorum (kibarca)"],
+        ["Hoeveel kost dit?","","Bu kaç para?"],
+        ["Dat is te duur","","Bu çok pahalı"],
+        ["Heeft u ook...?","","Elinizde ... var mı?"],
+        ["Ik neem dit","","Bunu alıyorum"],
+        ["De rekening, alstublieft","","Hesabı getirir misiniz?"],
+        ["Pin of contant?","","Kartla mı, nakitle mi?"],
+        ["Een kilo / Een liter","","Bir kilo / Bir litre"],
+        ["brood / kaas / melk","","ekmek / peynir / süt"],
+        ["groenten / fruit","","sebze / meyve"],
+        ["vlees / vis / kip","","et / balık / tavuk"],
+        ["koffie / thee / water","","kahve / çay / su"],
+        ["Waar is de kassa?","","Kasa nerede?"],
+        ["Heeft u een tasje?","","Torba ister misiniz?"],
+        ["De bon, alstublieft","","Fişi alabilir miyim?"],
+      ],
+      dialogues:[
+        {title:"Albert Heijn'de alışveriş",lines:[
+          {p:"Yasemin",d:"Goedemiddag. Heeft u verse tomaten?",tr:"İyi günler. Taze domates var mı?"},
+          {p:"Medewerker",d:"Ja, die staan in het groentegedeelte, naast de komkommers.",tr:"Evet, salatalıkların yanında sebze bölümünde."},
+          {p:"Yasemin",d:"Hoeveel kost een kilo tomaten?",tr:"Bir kilo domates ne kadar?"},
+          {p:"Medewerker",d:"Twee euro negentig per kilo.",tr:"Kilo başı iki euro doksan."},
+          {p:"Yasemin",d:"Dan neem ik twee kilo. En heeft u ook peterselie?",tr:"O zaman iki kilo alıyorum. Maydanozunuz var mı?"},
+        ]},
+        {title:"Kafede sipariş",lines:[
+          {p:"Ober",d:"Wat mag het zijn?",tr:"Ne istiyorsunuz? (Ne buyurursunuz?)"},
+          {p:"Kemal",d:"Een koffie met melk en een appelgebak, alstublieft.",tr:"Sütlü bir kahve ve bir elma pastası lütfen."},
+          {p:"Ober",d:"Komt eraan. Eet u hier of neemt u het mee?",tr:"Hemen getiriyorum. Burada mı yiyeceksiniz yoksa paket mi?"},
+          {p:"Kemal",d:"Hier, alstublieft.",tr:"Burada, teşekkürler."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Mag ik + mastar:</strong> 'Mag ik een koffie?' (Bir kahve alabilir miyim?). 'Mag ik hier zitten?' (Buraya oturabilir miyim?). Bu form çok kibar ve çok kullanışlı!"},
+        {type:"g",rule:"<strong>Er is / Er zijn:</strong> 'er is' = vardır (tekil). 'Er zijn' = vardır (çoğul). 'Er is een probleem.' (Bir sorun var.) 'Er zijn veel mensen.' (Çok insan var.)"},
+        {type:"tr",rule:"<strong>🇹🇷 'Er is' = Türkçe 'Var':</strong> 'Er is melk.' = 'Süt var.' 'Er is geen melk.' = 'Süt yok.' Bu yapı Türkçe 'var/yok'la benzer! Hollandaca'da çok kullanılır."}
+      ]
+    }
+  },
+  {
+    id:5, title:"Saat, Tarih & Randevu", level:"A1+", lhdr:"a1plus", time:"50 dk", status:"unlocked",
+    desc:"Hollandaca saat söyleme (yarım saat sistemi!), tarih ve randevu alma.",
+    content:{
+      intro:"Hollandaca saat sistemi Türkçe'den farklı. 'Half drie' = 02:30 (üçe yarım)! Bu Türk öğrencilerin en çok karıştırdığı konudur.",
+      trNote:"🇹🇷 BÜYÜK FARK: Türkçe'de 'iki buçuk' = 02:30. Hollandaca'da 'half drie' = 02:30 ama 'üçe yarım' diye düşünürsün. Half twee = 01:30, half vier = 03:30!",
+      vocab:[
+        ["Hoe laat is het?","","Saat kaç?"],
+        ["Het is twee uur","","Saat iki"],
+        ["half drie","[= 02:30]","Üçe yarım = iki buçuk — TÜRKÇE TERSİ!"],
+        ["kwart over twee","[= 02:15]","İki çeyrek geçiyor"],
+        ["kwart voor drie","[= 02:45]","Üçe çeyrek var"],
+        ["'s ochtends / 's middags","","sabah (am) / öğleden sonra (pm)"],
+        ["'s avonds / 's nachts","","akşam / gece"],
+        ["maandag, dinsdag","","Pazartesi, Salı"],
+        ["woensdag, donderdag","","Çarşamba, Perşembe"],
+        ["vrijdag, zaterdag, zondag","","Cuma, Cumartesi, Pazar"],
+        ["januari, februari...","","ocak, şubat... (küçük harf!)"],
+        ["Ik wil een afspraak maken","","Randevu almak istiyorum"],
+        ["Wanneer komt dat uit?","","Ne zaman uygun?"],
+        ["Op vrijdag om drie uur","","Cuma günü saat üçte"],
+        ["Tot dan!","","O zamana kadar! / Görüşürüz o zaman!"],
+      ],
+      dialogues:[
+        {title:"Telefonda doktor randevusu",lines:[
+          {p:"Assistent",d:"Huisartsenpraktijk Van den Berg, wat kan ik voor u doen?",tr:"Van den Berg aile kliniği, nasıl yardımcı olabilirim?"},
+          {p:"Halil",d:"Goedemorgen. Ik wil graag een afspraak maken voor deze week.",tr:"Günaydın. Bu hafta için randevu almak istiyorum."},
+          {p:"Assistent",d:"Wat is uw klacht?",tr:"Şikayetiniz ne?"},
+          {p:"Halil",d:"Ik heb keelpijn en koorts.",tr:"Boğaz ağrım ve ateşim var."},
+          {p:"Assistent",d:"Kan u woensdag om half elf?",tr:"Çarşamba saat on buçukta (10:30) uygun mu?"},
+          {p:"Halil",d:"Ja, dat is prima. Tot woensdag!",tr:"Evet, çok iyi. Çarşambaya kadar!"},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Saat Sistemi:</strong> tam saat = 'twee uur'. Yarım saat = 'half + bir sonraki saat'. Çeyrek geçiyor = 'kwart over + saat'. Çeyrek kala = 'kwart voor + bir sonraki saat'."},
+        {type:"tr",rule:"<strong>🇹🇷 Ezber Trüksü:</strong> 'half [X]' = [X-1]:30. Yani half drie = üçten (3) bir öncesi = iki buçuk (02:30). Her seferinde saati kafandan bir geri al!"}
+      ]
+    }
+  },
+  {
+    id:6, title:"Sağlık & Doktor", level:"A2", lhdr:"a2c", time:"60 dk", status:"locked",
+    desc:"Hollanda sağlık sistemini anla — huisarts (aile doktoru), eczane, acil ve sigorta.",
+    content:{
+      intro:"Hollanda'da sağlık sistemi farklı işler: önce mutlaka huisarts'a (aile doktoru) gidilir. Direk hastaneye gitmek çalışmaz — her şey huisarts'tan başlar.",
+      trNote:"🇹🇷 Türkiye'den fark: Türkiye'de direk hastaneye gidebilirsin. Hollanda'da her şey huisarts'tan geçer. Önce huisarts → o gerekirse specialist'e sevk eder.",
+      vocab:[
+        ["de huisarts","","Aile doktoru (genel pratisyen — GPs ilk durak)"],
+        ["de apotheek","","Eczane"],
+        ["het ziekenhuis","","Hastane"],
+        ["de spoedeisende hulp (SEH)","","Acil servis"],
+        ["de zorgverzekering","","Sağlık sigortası (zorunlu!)"],
+        ["het eigen risico","","Muafiyet (2024: €385/yıl)"],
+        ["de verwijsbrief","","Sevk mektubu (specialist için gerekli)"],
+        ["het recept","","Reçete"],
+        ["Ik heb pijn","","Ağrım var / Ağrıyorum"],
+        ["Ik ben ziek","","Hastayım"],
+        ["Ik heb koorts","","Ateşim var"],
+        ["Ik heb hoofdpijn","","Baş ağrım var"],
+        ["Ik heb buikpijn","","Karın ağrım var"],
+        ["Ik ben allergisch voor","","...ye alerjim var"],
+        ["Bel een dokter!","","Doktor çağırın!"],
+      ],
+      dialogues:[
+        {title:"Huisarts'ta",lines:[
+          {p:"Dokter",d:"Goedemorgen. Wat zijn uw klachten?",tr:"Günaydın. Şikayetleriniz neler?"},
+          {p:"Fatih",d:"Ik heb al vijf dagen keelpijn en ik ben erg moe.",tr:"Beş günden beri boğaz ağrım var ve çok yorgunum."},
+          {p:"Dokter",d:"Heeft u ook koorts gehad?",tr:"Ateşiniz de oldu mu?"},
+          {p:"Fatih",d:"Ja, gisteren was het 38,5 graden.",tr:"Evet, dün 38,5 dereceydim."},
+          {p:"Dokter",d:"Ik schrijf een recept voor u uit. Rust goed uit.",tr:"Size bir reçete yazıyorum. Çok iyi dinlenin."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Durumu Anlatmak — 'Al' + şimdiki zaman:</strong> Hâlâ devam eden bir durumu anlatmak için 'al' (zaten/hâlâ) kullanılır. 'Ik heb al vijf dagen pijn.' = 'Beş günden beri ağrım var (ve hâlâ var).'"},
+        {type:"tr",rule:"<strong>🇹🇷 Kelime Benzerliği:</strong> 'Moe' (yorgun) = Türkçe 'bunalmak'tan biraz farklı ama benzer his. 'Griep' (grip) = Türkçe'deki 'grip'! Hollandacada birçok Fransız kökenli kelime Türkçe'ye geçmiştir."}
+      ]
+    }
+  },
+  {
+    id:7, title:"Ulaşım & Yön Tarifi", level:"A2", lhdr:"a2c", time:"55 dk", status:"locked",
+    desc:"Toplu taşıma, OV-chipkaart, tren, bisiklet ve yön sorma/tarif etme.",
+    content:{
+      intro:"Hollanda'da bisiklet ve toplu taşıma hayatın merkezindedir. OV-chipkaart ile tüm toplu taşımayı kullanırsın. Yön tarifleri hem sözlü hem yazılı sınavda çıkar.",
+      trNote:"🇹🇷 Hollanda'da araba pek kullanılmaz — bisiklet (fiets) kraldır! Yeni gelen Türkler için bisikletle alışmak başta zor ama zorunlu.",
+      vocab:[
+        ["de fiets","","bisiklet (Hollanda'nın simgesi!)"],
+        ["de trein / de bus","","tren / otobüs"],
+        ["de metro / de tram","","metro / tramvay"],
+        ["het OV-chipkaart","","toplu taşıma kartı (şarj edilebilir)"],
+        ["het station","","tren istasyonu"],
+        ["Waar is...?","","... nerede?"],
+        ["Hoe kom ik bij...?","","...'ya nasıl giderim?"],
+        ["links / rechts / rechtdoor","","sol / sağ / düz devam"],
+        ["de eerste / tweede straat","","birinci / ikinci sokak"],
+        ["overstappen","","aktarma yapmak"],
+        ["instappen / uitstappen","","binmek / inmek"],
+        ["het perron","","tren peron"],
+        ["vertraging","","gecikme (çok sık olur!)"],
+        ["de bushalte","","otobüs durağı"],
+        ["op de fiets","","bisikletle"],
+      ],
+      dialogues:[
+        {title:"Yol sorma",lines:[
+          {p:"Selin",d:"Pardon, hoe kom ik bij het Centraal Station?",tr:"Pardon, Merkez İstasyonu'na nasıl giderim?"},
+          {p:"Voorbijganger",d:"U gaat hier rechtdoor, dan de eerste straat links.",tr:"Buradan düz gidin, sonra birinci sokaktan sola."},
+          {p:"Selin",d:"Is het ver lopen?",tr:"Yürüyerek uzak mı?"},
+          {p:"Voorbijganger",d:"Nee, ongeveer tien minuten. Of neem de tram nummer drie.",tr:"Hayır, yaklaşık on dakika. Ya da 3 numaralı tramvayı alın."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Yön Fiilleri:</strong> nemen (almak/binmek), overstappen (aktarma), lopen (yürümek), rijden (gitmek/sürmek), afslaan (dönmek). 'Sla hier rechts af.' = Burada sağa dön."},
+        {type:"tr",rule:"<strong>🇹🇷 Bisiklet Kültürü:</strong> Hollanda'da bisiklet için ayrı yollar var (fietspad). Bisiklete öncelik insan hakkıdır! Yeni gelenlerin en çok şaşırdığı şey bu. Bisiklet sigortası tavsiye edilir."}
+      ]
+    }
+  },
+  {
+    id:8, title:"Geçmiş Zaman (Verleden Tijd)", level:"A2", lhdr:"a2c", time:"80 dk", status:"locked",
+    desc:"Hollandacada geçmiş zaman — düzenli (werkte), düzensiz (ging) ve tamamlanmış zaman (heeft gewerkt).",
+    content:{
+      intro:"Hollandacada iki tür geçmiş zaman var: OVT (Onvoltooid Verleden Tijd = basit geçmiş) ve VTT (Voltooid Tegenwoordige Tijd = geçmiş-şimdiki). İkisi de sınavda çıkar.",
+      trNote:"🇹🇷 Türkçe'den fark: Türkçe'de '-dı/-di' ve '-mış/-miş' geçmişi ayrı. Hollandacada OVT ≈ '-dı geçmiş' ve VTT ≈ '-mış geçmiş'. Ama her zaman tam örtüşmez.",
+      vocab:[
+        ["OVT düzenli: stam + -te","","'t KOFSCHIP' kuralı — gövde t,k,f,s,ch,p ile bitiyorsa -te"],
+        ["OVT düzenli: stam + -de","","Diğer tüm fiiller: leven→leefde, bellen→belde"],
+        ["werken → werkte","","çalışmak → çalıştı"],
+        ["leven → leefde","","yaşamak → yaşadı (f→v→f değişimi!)"],
+        ["OVT düzensiz (öğren!):","",""],
+        ["zijn → was","","olmak → idi"],
+        ["hebben → had","","sahip olmak → vardı"],
+        ["gaan → ging","","gitmek → gitti"],
+        ["komen → kwam","","gelmek → geldi"],
+        ["zien → zag","","görmek → gördü"],
+        ["VTT = hebben/zijn + gedeelwoord","","Tamamlanmış eylem"],
+        ["ik heb gewerkt","","çalıştım (tamamlandı)"],
+        ["ik ben gegaan","","gittim (hareket fiili → zijn!)"],
+        ["ik ben geweest","","oldum / gittim (zijn → zijn!)"],
+        ["Gisteren / vroeger / twee jaar geleden","","dün / eskiden / iki yıl önce"],
+      ],
+      dialogues:[
+        {title:"Kendini tanıtma — sınav için!",lines:[
+          {p:"Başlangıç",d:"Ik ben geboren in Turkije en ik heb daar vijfentwintig jaar gewoond.",tr:"Türkiye'de doğdum ve orada yirmi beş yıl yaşadım."},
+          {p:"Eğitim",d:"Ik heb economie gestudeerd aan de universiteit van Ankara.",tr:"Ankara Üniversitesi'nde ekonomi okudum."},
+          {p:"İş",d:"Daarna werkte ik zeven jaar als leraar.",tr:"Sonra yedi yıl öğretmen olarak çalıştım."},
+          {p:"Hollanda'ya geliş",d:"In 2020 ben ik naar Nederland gekomen voor mijn partner.",tr:"2020 yılında eşim için Hollanda'ya geldim."},
+          {p:"Şimdi",d:"Nu woon ik in Utrecht en leer ik Nederlands.",tr:"Şu an Utrecht'te yaşıyorum ve Hollandaca öğreniyorum."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>'t KOFSCHIP kuralı:</strong> Gövde t, k, f, s, ch, p harfleriyle bitiyorsa → -te/-ten. Diğerleri → -de/-den. Ezber yöntemi: 't KoFSCHiP' kelimesindeki harflere bak. werken(k) → werkte. leven → leefde."},
+        {type:"g",rule:"<strong>VTT'de hebben mi, zijn mi?</strong> Hareket + konum değişimi fiilleri 'zijn' alır: gaan(gitmek), komen(gelmek), worden(olmak), blijven(kalmak), rijden(gitmek). Diğerleri 'hebben' alır."},
+        {type:"tr",rule:"<strong>🇹🇷 Avantajın:</strong> VTT = 'ik ben gegaan' yapısı Türkçe'deki 'gitti' gibi tamamlanmış eylemi ifade eder. Türkçe öğrenciler bu zamanı sezgisel olarak doğru kullanır!"}
+      ]
+    }
+  },
+  {
+    id:9, title:"Çalışma Hayatı & ONA", level:"A2", lhdr:"a2c", time:"65 dk", status:"locked",
+    desc:"Hollanda iş hayatı, çalışan hakları ve ONA sınavı — CV, sözleşme, asgari ücret.",
+    content:{
+      intro:"ONA (Oriëntatie op de Nederlandse Arbeidsmarkt) sınavı, Hollanda'da çalışma hayatı hakkında bilgi testi. İş hakların, yükümlülüklerin ve iş arama süreci.",
+      trNote:"🇹🇷 Türkiye'den fark: Hollanda'da asgari ücret (minimumloon) kanunen belirlenir. İşten çıkarma çok zorlaştırılmıştır. İşverenin seni kolayca kovamaması büyük avantaj.",
+      vocab:[
+        ["het cv / de sollicitatiebrief","","özgeçmiş / ön yazı (motivasyon mektubu)"],
+        ["het arbeidscontract","","iş sözleşmesi"],
+        ["fulltime / parttime","","tam zamanlı (38-40 saat) / yarı zamanlı"],
+        ["het minimumloon","","asgari ücret (hükümet belirler)"],
+        ["de vakantiedagen","","yıllık izin (minimum 20 gün, tam zamanlı)"],
+        ["het vakantiegeld","","tatil parası (yıllık maaşın %8'i — Mayıs'ta ödenir)"],
+        ["het pensioen / AOW","","emeklilik maaşı (67 yaşından itibaren)"],
+        ["de zorgverzekering","","sağlık sigortası (zorunlu)"],
+        ["WW-uitkering","","işsizlik yardımı (UWV'den)"],
+        ["de ZZP'er","","serbest çalışan / freelancer"],
+        ["de KvK","","Ticaret Odası (şirket kaydı buraya)"],
+        ["de proeftijd","","deneme süresi (maksimum 2 ay)"],
+        ["de CAO","","toplu iş sözleşmesi (sektör bazlı)"],
+        ["de loonstrook","","maaş bordrosu"],
+        ["Ik zoek werk","","İş arıyorum"],
+      ],
+      dialogues:[
+        {title:"Mülakat soruları — ONA sınavı için",lines:[
+          {p:"Manager",d:"Vertel iets over uzelf.",tr:"Kendinizden bahsedin."},
+          {p:"Adem",d:"Ik heb tien jaar ervaring als elektricien in Turkije. Ik ben betrouwbaar en werk graag in teamverband.",tr:"Türkiye'de on yıl elektrikçi olarak çalıştım. Güvenilir biriyim ve ekip çalışmasını severim."},
+          {p:"Manager",d:"Waarom wilt u bij ons werken?",tr:"Neden bizimle çalışmak istiyorsunuz?"},
+          {p:"Adem",d:"Uw bedrijf heeft een goede reputatie. Ik wil mijn vaardigheden gebruiken en bijdragen aan uw team.",tr:"Firmanızın iyi bir itibarı var. Becerilerimi kullanmak ve ekibinize katkıda bulunmak istiyorum."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Modale Fiiller (çok önemli!):</strong> kunnen (yapabilmek), mogen (izinli olmak), moeten (zorunda olmak), willen (istemek), zullen (olacak). 'Ik kan zwemmen.' / 'U moet een verzekering hebben.' / 'Ik wil werken.'"},
+        {type:"tr",rule:"<strong>🇹🇷 Haklarını Bil:</strong> Hollanda'da asgari ücret altında çalıştırılamazsın. 20 gün yıllık izin hakkın var. İşverenin seni kovması için mahkeme izni gerekebilir. Bu sınavda çıkan önemli bilgilerdir."}
+      ]
+    }
+  },
+  {
+    id:10, title:"Resmi Yazışma & Formlar", level:"A2", lhdr:"a2c", time:"70 dk", status:"locked",
+    desc:"Belediyeye mektup yazma, formları doldurma, BSN, DUO ve resmi Hollandaca.",
+    content:{
+      intro:"Hollanda'da resmi yazışma çok önemli. Belediye, kira, sigorta... Her yerde form dolduruyorsun. Doğru formatta yazmak sınav puanını da etkiler.",
+      trNote:"🇹🇷 Türkçe ipucu: Resmi mektup formatı Türkçe resmi yazışmaya benzer — adreste, selamda ve kapanışta belirli kalıplar kullanılır.",
+      vocab:[
+        ["Geachte heer/mevrouw","","Sayın Bay/Bayan (resmi başlangıç)"],
+        ["Met vriendelijke groet","","Saygılarımla (resmi kapanış)"],
+        ["Hierbij stuur ik u...","","Ekte gönderiyorum / İletiyorum"],
+        ["Naar aanleiding van uw brief","","Mektubunuza atıfla"],
+        ["Ik verzoek u vriendelijk","","Nazikçe talep ediyorum"],
+        ["Bijgaand vindt u","","Ekte bulacaksınız"],
+        ["Geboortedatum","","Doğum tarihi"],
+        ["Verblijfsadres","","İkamet adresi"],
+        ["Burgerservicenummer (BSN)","","Sosyal Güvenlik Numarası (Hollanda'daki her şey için!)"],
+        ["Handtekening","","İmza"],
+        ["Verplicht veld","","Zorunlu alan"],
+        ["Betreft:","","Konu: (mektupta)"],
+        ["de gemeente","","belediye"],
+        ["de huurbaas / de verhuurder","","ev sahibi"],
+        ["het huurcontract","","kira sözleşmesi"],
+      ],
+      dialogues:[
+        {title:"Ev sahibine mektup (kira şikayeti)",lines:[
+          {p:"Aanhef",d:"Geachte mevrouw Jansen,",tr:"Sayın Bayan Jansen,"},
+          {p:"Giriş",d:"Hierbij wil ik uw aandacht vragen voor een probleem in mijn woning.",tr:"Evimde bir sorun hakkında dikkatinizi çekmek istiyorum."},
+          {p:"Sorun",d:"Sinds drie weken werkt de verwarming in de slaapkamer niet.",tr:"Üç haftadır yatak odasındaki ısıtma çalışmıyor."},
+          {p:"Talep",d:"Ik verzoek u vriendelijk dit zo snel mogelijk te laten repareren.",tr:"Mümkün olan en kısa sürede tamir ettirmenizi nazikçe talep ediyorum."},
+          {p:"Kapanış",d:"Met vriendelijke groet, A. Yıldız",tr:"Saygılarımla, A. Yıldız"},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Resmi Dil Özellikleri:</strong> U kullan (sen değil). Pasif yapılar: 'wordt gerepareerd' (tamir edilecektir). Uzun cümleler. Yuvarlak ifadeler: 'Ik verzoek u vriendelijk' yerine 'Doe dit alsjeblieft' demeyin."},
+        {type:"tr",rule:"<strong>🇹🇷 BSN = Her Şey:</strong> Hollanda'da BSN numarası olmadan neredeyse hiçbir şey yapamazsın — banka hesabı, sigorta, iş, kira. Belgeye taşındıktan sonra en önce BSN al!"}
+      ]
+    }
+  },
+  {
+    id:11, title:"Hollanda Kültürü & KNM", level:"B1", lhdr:"b1c", time:"85 dk", status:"locked",
+    desc:"KNM sınavı için Hollanda tarihi, devlet yapısı, sosyal değerler ve kültür.",
+    content:{
+      intro:"KNM (Kennis van de Nederlandse Maatschappij) sınavı Hollanda'nın nasıl çalıştığını test eder. Devlet yapısı, haklar, değerler ve tarih en önemli konulardır.",
+      trNote:"🇹🇷 Kültür şoku: Hollandalılar çok doğrudan konuşur — bu kaba sayılmaz. 'Nee' gerçekten 'hayır' demektir, ısrar etmek tuhaf karşılanır. Türk kültüründen büyük fark!",
+      vocab:[
+        ["de Grondwet","","Anayasa (1815)"],
+        ["de Tweede Kamer","","Meclis (150 sandalye)"],
+        ["de Eerste Kamer","","Senato (75 sandalye)"],
+        ["de democratie","","demokrasi — her 4 yılda seçim"],
+        ["Koning Willem-Alexander","","Kral Willem-Alexander (devlet başkanı)"],
+        ["de Minister-President","","Başbakan (hükümeti yönetir)"],
+        ["de burgemeester","","belediye başkanı (seçimle değil, atanır!)"],
+        ["het gemeentehuis","","belediye binası"],
+        ["DUO","","İnburgering sınavını yöneten kurum"],
+        ["IND","","Göç İdaresi (oturma izni)"],
+        ["Koningsdag","","Kral Günü — 27 Nisan (ulusal bayram, turuncu!)"],
+        ["Bevrijdingsdag","","Kurtuluş Günü — 5 Mayıs (2. Dünya Savaşı sonu)"],
+        ["Sinterklaas","","5 Aralık — Noel Baba'ya benzer çocuk bayramı"],
+        ["het poldermodel","","Uzlaşma demokrasi modeli (Hollanda'ya özgü)"],
+        ["'doe maar gewoon'","","Normal davran, gösteriş yapma (önemli kültür değeri)"],
+      ],
+      dialogues:[
+        {title:"KNM soru-cevap pratiği",lines:[
+          {p:"Soru",d:"Wie is het staatshoofd van Nederland?",tr:"Hollanda'nın devlet başkanı kim?"},
+          {p:"Cevap",d:"De Koning. Momenteel Koning Willem-Alexander.",tr:"Kral. Şu an Kral Willem-Alexander."},
+          {p:"Soru",d:"Hoe vaak zijn er in Nederland nationale verkiezingen?",tr:"Hollanda'da ulusal seçimler ne sıklıkla yapılır?"},
+          {p:"Cevap",d:"Elke vier jaar voor de Tweede Kamer.",tr:"Meclis için her dört yılda bir."},
+          {p:"Soru",d:"Wat is de officiële taal van Nederland?",tr:"Hollanda'nın resmi dili nedir?"},
+          {p:"Cevap",d:"Nederlands. In Friesland ook Fries.",tr:"Hollandaca. Friesland'da ayrıca Frizce de resmi."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Hollanda Devlet Yapısı:</strong> Kral → Başbakan + Bakanlar Kurulu → Tweede Kamer (150 seçilmiş üye) → Eerste Kamer (senato). Yasalar Tweede Kamer'den çıkar, Eerste Kamer denetler."},
+        {type:"tr",rule:"<strong>🇹🇷 Türkçe ile Karşılaştırma:</strong> Hollanda = Anayasal Monarşi (Kral sembolik, fiili güç hükümette). Türkiye = Cumhuriyet. Hollanda'da belediye başkanı seçimle değil Kral kararıyla atanır — bu Türkçe öğrencileri şaşırtır!"}
+      ]
+    }
+  },
+  {
+    id:12, title:"Karmaşık Gramer: Yan Cümleler", level:"B1", lhdr:"b1c", time:"75 dk", status:"locked",
+    desc:"Bağlaçlar ve yan cümleler — omdat, dat, als, terwijl, hoewel. B1 için şart.",
+    content:{
+      intro:"B1 seviyesi için karmaşık cümleler kurabilmek gerekir. Yan cümlede fiil sona gider — bu Türkçe öğrenciler için büyük avantaj!",
+      trNote:"🇹🇷 En Büyük Avantajın: Hollandacada yan cümlede fiil sona gider — tıpkı Türkçe gibi! 'Omdat ik Nederlands leer' = 'Hollandaca öğrendiğim için' (fiil sonda). Bu seni İngilizce konuşanlardan daha avantajlı yapar!",
+      vocab:[
+        ["omdat","","çünkü (neden — yan cümle)"],
+        ["dat","","ki / -dığı (dolaylı anlatım)"],
+        ["als / wanneer","","eğer / -dığında"],
+        ["terwijl","","iken / -rken"],
+        ["hoewel","","her ne kadar / -se de"],
+        ["zodat","","ki böylece / -sın diye"],
+        ["voordat / nadat","","...dan önce / ...dan sonra"],
+        ["of","","veya (soru bağlacı: ya... ya da)"],
+        ["Ik weet dat...","","...biliyorum ki..."],
+        ["Hij zei dat...","","O dedi ki... (dolaylı anlatım)"],
+        ["Scheidbaar werkwoord","","Ayrılabilen fiil"],
+        ["opbellen → ik bel op","","aramak → arıyorum (önek sona gider)"],
+        ["aankomen → ik kom aan","","gelmek → geliyorum"],
+        ["meenemen → ik neem mee","","yanımda götürmek → götürüyorum"],
+        ["uitleggen → ik leg uit","","açıklamak → açıklıyorum"],
+      ],
+      dialogues:[
+        {title:"Yan cümle örnekleri",lines:[
+          {p:"omdat",d:"Ik leer Nederlands omdat ik in Nederland wil werken.",tr:"Hollanda'da çalışmak istediğim için Hollandaca öğreniyorum. (fiil=wil werken sonda!)"},
+          {p:"dat",d:"Ik weet dat hij morgen komt.",tr:"Yarın geleceğini biliyorum. (fiil=komt sonda!)"},
+          {p:"terwijl",d:"Ik luister naar muziek terwijl ik kook.",tr:"Yemek pişirirken müzik dinliyorum."},
+          {p:"hoewel",d:"Hoewel het moeilijk is, leer ik elke dag.",tr:"Zor olsa da her gün öğreniyorum."},
+          {p:"Ayrılabilen",d:"Ik bel mijn moeder op. / Morgen bel ik haar op.",tr:"Annemi arıyorum. / Yarın onu arayacağım. (op sona gider)"},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Yan Cümle Düzeni:</strong> BAĞLAÇ + Özne + ... + FİİL. Ana cümle S+V+... iken yan cümlede fiil sona gider. 'Ik werk.' (Ana) + 'omdat ik geld nodig heb.' (Yan → geld nodig heb, fiil sonda)"},
+        {type:"tr",rule:"<strong>🇹🇷 Türkçe Avantajı:</strong> Türkçe'de yan cümlede fiil zaten sona gider (SOV). Hollandacada da aynı! Bu kuralı öğrenmek Türkçe konuşanlara çok daha kolay gelir."},
+        {type:"tr",rule:"<strong>🇹🇷 Ayrılabilen Fiiller — Türkçe Benzerlik:</strong> 'opbellen' (aramak) → 'ik bel op' (arıyorum). Bu, Türkçe'deki '-e bağlanmak → bağlanıyorum' gibi — kök fiil + ek. Türkçe öğrenciler bu yapıyı sezgisel olarak anlıyor."}
+      ]
+    }
+  },
+  {
+    id:13, title:"Okuma Anlama (Leesvaardigheid)", level:"B1", lhdr:"b1c", time:"70 dk", status:"locked",
+    desc:"Sınava hazırlık: gazete metinleri, resmi belgeler ve karmaşık yazıları anlama stratejileri.",
+    content:{
+      intro:"İnburgering sınavında okuma anlama önemli bir bölümdür. Her kelimeyi anlamak zorunda değilsin — anahtar kelimelerle ana fikri yakala.",
+      trNote:"🇹🇷 İpucu: Türkçe gazete okuma alışkanlığın varsa bu bölümde daha başarılı olursun — aynı stratejiyi kullan: başlığa bak, ilk ve son paragrafa bak, ana fikri anla.",
+      vocab:[
+        ["de alinea","","paragraf"],
+        ["de kop / de titel","","başlık"],
+        ["de inleiding / het slot","","giriş / sonuç"],
+        ["de hoofdgedachte","","ana düşünce / ana fikir"],
+        ["de subvraag","","alt soru / detay soru"],
+        ["verwijzen naar","","...a atıfta bulunmak"],
+        ["de context","","bağlam"],
+        ["af te leiden","","çıkarım yapmak"],
+        ["samenvatten","","özetlemek"],
+        ["de advertentie","","ilan / reklam"],
+        ["de aankondiging","","duyuru"],
+        ["het formulier","","form"],
+        ["invullen","","doldurmak"],
+        ["ondertekenen","","imzalamak"],
+        ["de bijlage","","ek (belge)"],
+      ],
+      dialogues:[
+        {title:"Okuma stratejisi adımları",lines:[
+          {p:"Adım 1",d:"Lees eerst de vragen, dan de tekst.",tr:"Önce soruları oku, sonra metni."},
+          {p:"Adım 2",d:"Let op signaalwoorden: maar, toch, daarom, hoewel.",tr:"Sinyal kelimelerine dikkat et: ama, yine de, bu yüzden, her ne kadar."},
+          {p:"Adım 3",d:"Je hoeft niet elk woord te begrijpen.",tr:"Her kelimeyi anlamak zorunda değilsin."},
+          {p:"Adım 4",d:"Gebruik de context om moeilijke woorden te raden.",tr:"Bağlamı kullanarak zor kelimeleri tahmin et."},
+          {p:"Adım 5",d:"Controleer je antwoorden in de tekst.",tr:"Cevaplarını metinde kontrol et."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Sinyal Kelimeleri (Signaalwoorden):</strong> Bağlaçlar metnin yapısını gösterir. 'Maar / toch / echter' = kontrast. 'Omdat / want / daarom' = neden-sonuç. 'Ten eerste / ten tweede / ten slotte' = sıralama."},
+        {type:"tr",rule:"<strong>🇹🇷 Sınav İpucu:</strong> Hollandaca sınavında çoktan seçmeli sorularda 'altijd', 'nooit', 'alleen' gibi mutlak kelimeler içeren şıklar genellikle yanlıştır. Türkçe sınav mantığı burada da geçerli!"}
+      ]
+    }
+  },
+  {
+    id:14, title:"Konuşma & Telaffuz Geliştirme", level:"B1", lhdr:"b1c", time:"65 dk", status:"locked",
+    desc:"Konuşma sınavına hazırlık — telaffuz, akıcılık ve gerçek hayat senaryoları.",
+    content:{
+      intro:"Hollandaca konuşmak başta zor görünür ama Hollandalılar genelde sabırlıdır ve İngilizceye geçmek ister — bırakma, Hollandaca devam et!",
+      trNote:"🇹🇷 Önemli: Hollandalılar senin aksanını umursamaz — içeriği anlaşılır olsun yeterli. Türk aksanıyla Hollandaca konuşmak tamamen kabul görebilir. Cesur ol!",
+      vocab:[
+        ["Ik bedoel...","","Demek istiyorum ki..."],
+        ["Hoe zeg je... in het Nederlands?","","Hollandacada ... nasıl denir?"],
+        ["Wacht even...","","Bir dakika / Şimdi söyleyeceğim..."],
+        ["Kun je dat herhalen?","","Tekrar edebilir misin?"],
+        ["Spreek je langzamer?","","Daha yavaş konuşabilir misin?"],
+        ["Ik weet het niet zeker, maar...","","Kesin değilim ama..."],
+        ["Dat klopt / Dat ben ik niet mee eens","","Doğru / Katılmıyorum"],
+        ["Mag ik ook iets zeggen?","","Ben de bir şey söyleyebilir miyim?"],
+        ["Eigenlijk...","","Aslında... (görüş bildirme)"],
+        ["Naar mijn mening...","","Bence / Benim görüşüme göre..."],
+        ["Enerzijds... anderzijds...","","Bir yandan... diğer yandan..."],
+        ["Ik ben het ermee eens","","Katılıyorum"],
+        ["Dat vind ik moeilijk te zeggen","","Bunu söylemesi zor"],
+        ["Nou ja...","","Şey... / Yani... (tereddüt)"],
+        ["Zeker! / Absoluut!","","Kesinlikle! / Tabii ki!"],
+      ],
+      dialogues:[
+        {title:"Konuşma sınavı senaryosu",lines:[
+          {p:"Examinator",d:"Wat vind u van werken in Nederland?",tr:"Hollanda'da çalışmak hakkında ne düşünüyorsunuz?"},
+          {p:"Cevap",d:"Naar mijn mening zijn de werkomstandigheden in Nederland goed. Enerzijds zijn er veel rechten. Anderzijds is de belasting hoog.",tr:"Bence Hollanda'daki çalışma koşulları iyi. Bir yandan pek çok hak var. Öte yandan vergiler yüksek."},
+          {p:"Examinator",d:"Vindt u de Nederlandse directheid prettig of niet?",tr:"Hollandalıların doğrudan iletişimini hoş buluyor musunuz?"},
+          {p:"Cevap",d:"In het begin vond ik het moeilijk. Nu ben ik er eigenlijk wel aan gewend.",tr:"Başta zorlandım. Şimdi aslında alıştım diyebilirim."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Mening Geven (Görüş Bildirme):</strong> Naar mijn mening... / Ik vind (dat)... / Ik denk (dat)... / Volgens mij... — Bu ifadeleri ezbere bil, konuşma sınavında çok işe yarar."},
+        {type:"tr",rule:"<strong>🇹🇷 Telaffuz Öncelikleri:</strong> (1) G/CH sesini öğren. (2) IJ/EI sesini doğru söyle. (3) Uzun ve kısa ünlü ayrımını koru. (4) V2 kuralına uy. Bu 4 şey doğruysa anlaşılırsın!"}
+      ]
+    }
+  },
+  {
+    id:15, title:"Final: Sınav Simülasyonu", level:"B1", lhdr:"b1c", time:"120 dk", status:"locked",
+    desc:"Tüm konuların kapsamlı tekrarı ve strateji — KNM, ONA, dil, sınav püf noktaları.",
+    content:{
+      intro:"Tebrikler! Tüm dersleri tamamladın. Bu son ders seni gerçek sınava hazırlıyor — strateji, zaman yönetimi ve özgüven.",
+      trNote:"🇹🇷 Son not: Yüzlerce Türk İnburgering sınavını geçti. Sen de geçeceksin. Hazırsın!",
+      vocab:[
+        ["KNM","","Kennis van de Nederlandse Maatschappij — kültür, siyaset, toplum"],
+        ["ONA","","Oriëntatie op de Nederlandse Arbeidsmarkt — iş hayatı"],
+        ["Leesvaardigheid","","Okuma anlama"],
+        ["Luistervaardigheid","","Dinleme anlama"],
+        ["Spreekvaardigheid","","Konuşma becerisi"],
+        ["Schrijfvaardigheid","","Yazma becerisi"],
+        ["Slaaggrens","","Geçme notu: %75 (50'de 37,5)"],
+        ["Herkansing","","Tekrar sınav (her bölüm 3 defa ücretsiz)"],
+        ["Tijdmanagement","","Zaman yönetimi (soru başı ~1,8 dk)"],
+        ["Eliminatiemethode","","Eleme yöntemi — yanlışları çiz"],
+        ["Eerste indruk","","İlk izlenim — genellikle doğru"],
+        ["Geen strafpunt","","Ceza puanı yok — bilmiyorsan tahmin et!"],
+        ["Rustig blijven","","Sakin kal — hazırsın!"],
+        ["Tot ziens bij het examen!","","Sınavda görüşürüz!"],
+        ["Succes!","","Başarılar!"],
+      ],
+      dialogues:[
+        {title:"Top 10 Sınav Tüyosu",lines:[
+          {p:"İpucu 1",d:"Lees de vraag goed — let op 'niet' en 'altijd'.",tr:"Soruyu dikkatlice oku — 'değil' ve 'her zaman' gibi kelimelere dikkat."},
+          {p:"İpucu 2",d:"Je weet het niet? Gok dan — geen strafpunten!",tr:"Bilmiyorsan tahmin et — ceza puanı yok!"},
+          {p:"İpucu 3",d:"Beheer je tijd: maximaal 1,5 minuut per vraag.",tr:"Zamanını yönet: soru başı maksimum 1,5 dakika."},
+          {p:"İpucu 4",d:"Sla moeilijke vragen over, kom er later op terug.",tr:"Zor soruları geç, sonra dön."},
+          {p:"İpucu 5",d:"Controleer je antwoorden als je tijd over hebt.",tr:"Zaman kalırsa cevaplarını kontrol et."},
+        ]}
+      ],
+      grammar:[
+        {type:"g",rule:"<strong>Sınav Bölümleri Özeti:</strong> KNM = Hollanda'yı bil. ONA = Çalışma hayatını bil. Leesvaardigheid = Metinleri anla. Luistervaardigheid = Diyalogları anla. Her bölüm ayrı ayrı değerlendirilebilir."},
+        {type:"tr",rule:"<strong>🇹🇷 Son Motivasyon:</strong> Sen zaten zor olan şeyi yaptın — Türkiye'den kalkıp Hollanda'ya geldin. Bu dil sınavı buna göre kolay! Hollandaca öğrenmek yeni dünyanı açıyor. Başarılar! 🎉"}
+      ]
+    }
+  }
+];
+
+// ═══════════ QUIZ DATA ═══════════
+const QUIZ = [
+  {q:"'Goedemorgen' ne anlama gelir?", opts:["İyi akşamlar","İyi geceler","İyi sabahlar","Hoşça kal"], ans:2, expl:"Goedemorgen = İyi sabahlar. Goedemiddag = İyi günler. Goedenavond = İyi akşamlar. Welterusten = İyi geceler."},
+  {q:"'de' mi yoksa 'het' mi? — '... kind'", opts:["de kind","het kind","een kind (her zaman)","Farketmez"], ans:1, expl:"'Kind' (çocuk) nötr bir kelimedir → het kind. ÖNEMLİ: Tüm küçültmeler (-je, -tje) HER ZAMAN het alır. Çoğullar her zaman de."},
+  {q:"Hollandacada V2 kuralı ne demektir?", opts:["Fiil her zaman en sona gider","Fiil her zaman cümlenin 2. konumundadır","Cümlede 2 fiil olmalıdır","Soru cümlelerinde fiil en başa gider"], ans:1, expl:"V2 kuralı: Ana cümlede FİİL HER ZAMAN 2. konumdadır. 'Ik werk thuis.' veya 'Morgen werk ik thuis.' — fiil her zaman 2. sıradadır. Türkçe'den çok farklı!"},
+  {q:"'Fiets' ne demektir?", opts:["Araba","Otobüs","Bisiklet","Tren"], ans:2, expl:"Fiets = bisiklet. Hollanda'da bisiklet kültürü çok önemli — insan sayısından fazla bisiklet var! Auto = araba, bus = otobüs, trein = tren."},
+  {q:"'Half drie' saat kaçtır?", opts:["03:30","02:30","03:15","02:45"], ans:1, expl:"DIKKAT! 'Half drie' = 02:30 (üçe yarım). Türkçe 'iki buçuk'a eşittir ama mantık farklı — Hollandacada 'üçe doğru yarım' demektir. Bu en sık yapılan hatadır!"},
+  {q:"'Ik heb geen auto' cümlesinde 'geen' neden kullanılmış?", opts:["Çünkü 'auto' çoğuldur","Çünkü 'auto' isim ve belirsiz","Çünkü fiil olumsuz","Çünkü cümle başında"], ans:1, expl:"'Geen' belirsiz isimlerle kullanılır. 'Ik heb geen auto' = Arabam yok. 'Niet' fiil ve sıfatlarla: 'Ik rij niet.' (Araba kullanmıyorum.)"},
+  {q:"Hollanda devlet başkanı kimdir?", opts:["Başbakan","Meclis Başkanı","Kral","Belediye Başkanı"], ans:2, expl:"Hollanda bir Anayasal Monarşi. Devlet başkanı Kral (şu an Kral Willem-Alexander). Başbakan hükümeti yönetir ama devlet başkanı değildir. Türkiye'den farklı!"},
+  {q:"'Ik ben gegaan' neden 'zijn' kullanıyor?", opts:["Gaan düzensiz fiil","Gaan hareket fiili — hebben değil zijn alır","Rastgele seçilmiş","İki form da doğru"], ans:1, expl:"Hollandaca VTT'de hareket + konum değişimi fiilleri 'zijn' alır: gaan, komen, worden, blijven, rijden. Diğerleri 'hebben' alır. 'Ik BEN gegaan' doğru, 'ik HEB gegaan' yanlış."},
+  {q:"BSN nedir?", opts:["Belçika Öğrenci Numarası","Belasting Service Nummer","Burgerservicenummer — kişisel kimlik numarası","Banka Sicil Numarası"], ans:2, expl:"BSN = BurgerServiceNummer. Hollanda'da bu numara olmadan banka hesabı açamazsın, sigorta yaptıramazsın, çalışamazsın. Taşındıktan sonra ilk iş BSN almak!"},
+  {q:"'t KOFSCHIP kuralı neyle ilgilidir?", opts:["Deniz yolu ulaşımı","OVT'de -te mi -de mi ekleneceği","Çoğul yapımı","de/het kuralı"], ans:1, expl:"'t KOFSCHIP: Fiil gövdesi bu harflerden biriyle (t,k,f,s,ch,p) bitiyorsa OVT -te alır. Örn: werken (k) → werkte. Diğerleri -de alır: leven → leefde."},
+  {q:"Hollanda'da Koningsdag ne zaman kutlanır?", opts:["30 Nisan","5 Mayıs","27 Nisan","31 Ocak"], ans:2, expl:"Koningsdag = Kral Günü = 27 Nisan (Kral Willem-Alexander'ın doğum günü). Tüm Hollanda turuncu giyer, özgür pazar kurulur. Çok eğlenceli bir ulusal bayram!"},
+  {q:"Hollandaca 'omdat' cümlesinde fiil nereye gider?", opts:["Cümlenin başına","Cümlenin 2. yerine","Cümlenin sonuna","Değişmez"], ans:2, expl:"Yan cümlelerde (omdat, dat, als, terwijl vb.) FİİL HER ZAMAN SONA gider. 'Ik leer Nederlands omdat ik hier wil WONEN.' — 'wonen' sonda. Bu Türkçe'ye benzer — avantajın!"},
+  {q:"Hollanda'da minimum çalışma hakkı — yıllık kaç gün izin?", opts:["10 gün","15 gün","20 gün","25 gün"], ans:2, expl:"Tam zamanlı çalışan herkes minimum 20 gün yıllık izin hakkına sahiptir (kanunla). Ayrıca maaşın %8'i tatil parası (vakantiegeld) her Mayıs ödenir."},
+  {q:"'Goedemorgen, hoe gaat het met u?' cümlesinde 'u' neden kullanılmış?", opts:["Çoğul için","Resmi/saygılı hitap — 'siz' gibi","Hata — 'jij' olmalıydı","Standart kullanım"], ans:1, expl:"'U' = resmi/saygılı (Türkçe 'siz' gibi). 'Jij/je' = gayri resmi (Türkçe 'sen' gibi). İş ortamında, yaşlılara, yabancılara 'u' kullan."},
+  {q:"Hollandaca'da 'er is' ne anlama gelir?", opts:["Burada olmak","Var olmak — 'var' gibi","Oraya gitmek","Henüz / Hâlâ"], ans:1, expl:"'Er is' = var (tekil). 'Er zijn' = var (çoğul). 'Er is een probleem.' = Bir sorun var. 'Er zijn veel mensen.' = Çok insan var. Türkçe 'var/yok'a çok benzer!"},
+];
+
+// ═══════════ EXAM DATA ═══════════
+const EXAM = [
+  {q:"Hollanda'nın resmi dili nedir?",opts:["Flamanca","Almanca","Frizce","Hollandaca"],ans:3},
+  {q:"'Goedemorgen' ne anlama gelir?",opts:["İyi geceler","İyi akşamlar","İyi sabahlar","Hoşça kal"],ans:2},
+  {q:"BSN ne için kullanılır?",opts:["Sadece banka için","Hollanda'da tüm resmi işlemler için kimlik numarası","Sadece vergi için","Sadece sağlık için"],ans:1},
+  {q:"Tweede Kamer kaç sandalyeden oluşur?",opts:["75","100","150","200"],ans:2},
+  {q:"Koningsdag hangi tarihte kutlanır?",opts:["5 Mayıs","30 Nisan","27 Nisan","31 Ocak"],ans:2},
+  {q:"İnburgering sınavının geçme notu nedir?",opts:["%60","%65","%70","%75"],ans:3},
+  {q:"İnburgering sınavı kaç dakikadır?",opts:["60 dk","75 dk","90 dk","120 dk"],ans:2},
+  {q:"'Fiets' ne demektir?",opts:["Araba","Tren","Bisiklet","Scooter"],ans:2},
+  {q:"'Het kind' neden 'het' alır?",opts:["Rastgele","Kind nötr kelime","Kind çoğul","Hata"],ans:1},
+  {q:"V2 kuralı nedir?",opts:["Fiil hep sonda","Fiil hep 2. konumda","2 fiil kullan","Soru fiili önde"],ans:1},
+  {q:"2024'te eigen risico (sağlık muafiyeti) ne kadardır?",opts:["€285","€385","€485","€585"],ans:1},
+  {q:"KvK nedir?",opts:["UWV","DUO","Ticaret Odası","IND"],ans:2},
+  {q:"'Half twee' saat kaçtır?",opts:["02:30","01:30","02:15","01:45"],ans:1},
+  {q:"İnburgering sınavını hangi kurum yönetir?",opts:["IND","UWV","DUO","Gemeente"],ans:2},
+  {q:"Bevrijdingsdag ne zaman kutlanır?",opts:["4 Mayıs","5 Mayıs","27 Nisan","15 Ağustos"],ans:1},
+  {q:"'Geen' ne zaman kullanılır?",opts:["Her olumsuzda","Fiil olumsuzda","Belirsiz isim olumsuzda","Sıfat olumsuzda"],ans:2},
+  {q:"'Gaan' fiilinin OVT'si nedir?",opts:["gegaan","gegted","ging","geed"],ans:2},
+  {q:"Koningsdag'da Hollandalılar hangi rengi giyer?",opts:["Kırmızı","Mavi","Yeşil","Turuncu"],ans:3},
+  {q:"AOW ne demektir?",opts:["Çalışma izni","Yaşlılık maaşı (emeklilik)","Sağlık sigortası","İşsizlik yardımı"],ans:1},
+  {q:"Hollanda'da ilk ziyaret edilen doktor hangisidir?",opts:["Uzman doktor","Huisarts (aile doktoru)","Hastane doktoru","Acil doktor"],ans:1},
+  {q:"'Ik ben gegaan' doğru mu yoksa 'ik heb gegaan' mı?",opts:["Ik ben gegaan","Ik heb gegaan","İkisi de doğru","İkisi de yanlış"],ans:0},
+  {q:"'Poldermodel' nedir?",opts:["Su yönetimi","Hollanda uzlaşma demokrasisi","Tarım sistemi","Siyasi parti"],ans:1},
+  {q:"AOW kaç yaşında başlar?",opts:["65","66","67","68"],ans:2},
+  {q:"'Spreekt u Nederlands?' ne demektir?",opts:["Hollandaca mı yazıyorsunuz?","Hollandaca anlıyor musunuz?","Hollandaca konuşuyor musunuz?","Hollandaca konuştunuz mu?"],ans:2},
+  {q:"Tam zamanlı çalışan için minimum yıllık izin kaç gündür?",opts:["10","15","20","25"],ans:2},
+  {q:"WW nedir?",opts:["Çalışma ve Refah","İşsizlik Kanunu (işsizlik yardımı)","Su ve Yollar","Konut ve Refah"],ans:1},
+  {q:"'vijfenvijftig' sayısı kaçtır?",opts:["545","455","55","5050"],ans:2},
+  {q:"Resmi Hollandacada nazikçe yardım istemek için kullanılır:",opts:["Help me!","Kunt u mij helpen?","Jij helpen mij?","Doe het!"],ans:1},
+  {q:"'Werken' fiilinin VTT'si (ik) nedir?",opts:["ik had gewerkt","ik heb gewerkt","ik ben gewerkt","ik werkte"],ans:1},
+  {q:"Hollanda Grachtengordel nedir?",opts:["Trafik sistemi","UNESCO Dünya Mirası tarihi kanallar ağı","Bisiklet yolu","Su arıtma sistemi"],ans:1},
+  {q:"'Doe maar gewoon' Hollanda kültüründe ne anlama gelir?",opts:["Her gün çalış","Normal davran, gösteriş yapma","Hep doğruyu söyle","Mutlu ol"],ans:1},
+  {q:"Belediye başkanı Hollanda'da nasıl göreve gelir?",opts:["Doğrudan seçimle","Kral kararıyla atanır","Meclis seçer","DUO atar"],ans:1},
+  {q:"'Verwijsbrief' ne demektir?",opts:["Taşınma belgesi","Sevk mektubu (specialist için)","Şikayet mektubu","Vergi referansı"],ans:1},
+  {q:"Vakantiegeld oranı nedir?",opts:["%5","%6","%8","%10"],ans:2},
+  {q:"Hangi cümle 'niet' kullanımı doğrudur?",opts:["Ik heb niet auto","Ik ben niet ziek","Ik werk geen","Ik ga niet school niet"],ans:1},
+  {q:"Hollanda'da zorunlu okul başlangıç yaşı nedir?",opts:["4","5","6","7"],ans:0},
+  {q:"CAO nedir?",opts:["Toplu İş Sözleşmesi","Merkezi Devlet Kurumu","Online Bilgisayar Yönetimi","Aktif Eğitim Kursu"],ans:0},
+  {q:"Hollanda vergi kurumunun adı nedir?",opts:["Financiën NL","De Belastingdienst","Fiscale Autoriteit","Rijksfinancies"],ans:1},
+  {q:"'de appel' mi yoksa 'het appel' mi doğru?",opts:["de appel","het appel","İkisi de doğru","İkisi de yanlış"],ans:0},
+  {q:"Konuşmacıyı anlamadığında ne dersin?",opts:["Spreek Nederlands!","Kunt u dat herhalen?","Ik luister niet","Ga weg"],ans:1},
+  {q:"'Zijn' fiilinin şimdiki zaman çekimi (ik) nedir?",opts:["ik wordt","ik was","ik ben","ik heb"],ans:2},
+  {q:"Amsterdam Grachtengordel hakkında doğru olan:",opts:["Trafik güzergahı","UNESCO Dünya Kültür Mirası","Bisiklet parkı","Alışveriş merkezi"],ans:1},
+  {q:"'Ik heb een afspraak' ne demektir?",opts:["Toplantım var","Randevum var","Ziyaretim var","Rezervasyonum var"],ans:1},
+  {q:"Scheidbaar werkwoord (ayrılabilen fiil) nedir?",opts:["Yerine konabilen fiil","Cümlede ayrılan fiil — 'opbellen → ik bel op'","Eski fiil","Geçmiş zamansız fiil"],ans:1},
+  {q:"Hollandacada 'g' harfi nasıl çıkarılır?",opts:["İngilizce 'g' gibi","Boğaz sesi (velaar friktatief)","Sessiz","Fransızca 'j' gibi"],ans:1},
+  {q:"İş sözleşmesinde maksimum proeftijd (deneme süresi) nedir?",opts:["1 ay","2 ay","3 ay","6 ay"],ans:1},
+  {q:"5 Aralık'ta kutlanan Hollanda geleneği nedir?",opts:["Kerstmis","Koningsdag","Sinterklaas","Pasen"],ans:2},
+  {q:"Yan cümlede doğru kelime sırası hangisi?",opts:["Ik weet dat hij komt morgen","Ik weet dat hij morgen komt","Ik weet hij morgen dat komt","Dat hij morgen ik weet"],ans:1},
+  {q:"Eerste Kamer'in görevi nedir?",opts:["Yasa yapmak","Yasaları denetlemek (senato)","Vergi toplamak","Yargılamak"],ans:1},
+  {q:"'Graag gedaan' ne demektir?",opts:["Sorun değil","Teşekkürler","Rica ederim / Ne demek","Lütfen"],ans:2},
+];
+
+// ═══════════ NAV ═══════════
+document.querySelectorAll('.nb').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.nb').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    showSec(b.dataset.sec);
+  });
+});
+
+function showSec(id) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  if (id === 'quiz') renderQuiz();
+}
+
+// ═══════════ LESSONS ═══════════
+let currentFilter = 'all';
+
+function renderLessons(filter) {
+  currentFilter = filter || currentFilter;
+  const grid = document.getElementById('lesson-grid');
+  const filtered = currentFilter === 'all' ? LESSONS : LESSONS.filter(l => l.level === currentFilter);
+  grid.innerHTML = filtered.map((l, fi) => {
+    const realIdx = LESSONS.indexOf(l);
+    return `
+    <div class="lcard${l.status === 'locked' ? ' locked' : ''}" onclick="${l.status !== 'locked' ? 'openLesson(' + realIdx + ')' : ''}">
+      <div class="lhdr ${l.lhdr}">
+        <div class="lnum">Ders ${realIdx + 1} · ${l.level} · ${l.status === 'completed' ? 'Tamamlandı' : l.status === 'locked' ? 'Kilitli' : 'Başla'}</div>
+        <div class="lname">${l.title}</div>
+        <div class="lbadge">${l.status === 'completed' ? '✓' : l.status === 'locked' ? '🔒' : '▶'}</div>
+      </div>
+      <div class="lbody">
+        <div class="ltags">
+          <span class="tag ${l.level === 'A1' ? 'tg' : l.level === 'A1+' ? 'tb' : l.level === 'A2' ? 'to' : 'tr'}">${l.level}</span>
+          <span class="tag tt">⏱ ${l.time}</span>
+        </div>
+        <div class="ldesc">${l.desc}</div>
+        <button class="lbtn${l.status === 'completed' ? ' done' : l.status === 'locked' ? ' locked' : ''}" ${l.status === 'locked' ? 'disabled' : ''}>
+          ${l.status === 'completed' ? '↩ Tekrar Et' : l.status === 'locked' ? '🔒 Kilitli' : '▶ Başla'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterLessons(level) {
+  document.querySelectorAll('.ltag').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderLessons(level);
+}
+
+function openLesson(i) {
+  const l = LESSONS[i];
+  const c = l.content;
+  document.getElementById('mcontnt').innerHTML = `
+    <div class="mtop">
+      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.6;margin-bottom:7px">Ders ${i+1} · ${l.level}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:5px">${l.title}</div>
+      <div style="font-size:.82rem;opacity:.65">${l.level} · ${l.time}</div>
+      <button class="mclose" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mbody">
+      <p style="font-size:.9rem;color:var(--g600);line-height:1.65;margin-bottom:16px;padding:14px 16px;background:var(--g100);border-radius:10px;border-left:3px solid var(--gold2)">${c.intro}</p>
+      ${c.trNote ? `<p style="font-size:.88rem;color:#8b1a1a;line-height:1.6;margin-bottom:18px;padding:12px 16px;background:rgba(192,57,43,.06);border-radius:10px;border-left:3px solid var(--red)">${c.trNote}</p>` : ''}
+
+      <div class="stitle2">📝 Kelimeler ve İfadeler</div>
+      <table class="vtable">
+        <tr><th>Hollandaca</th><th>Telaffuz</th><th>Türkçe</th></tr>
+        ${c.vocab.map(v => `<tr><td><span class="dw">${v[0]}</span>${v[1] ? '<br><span style="font-style:italic;color:var(--g400);font-size:.78rem">['+v[1]+']</span>' : ''}</td><td style="color:var(--g600);font-size:.82rem">${v[1] || '—'}</td><td><span class="trw">${v[2]}</span></td></tr>`).join('')}
+      </table>
+
+      ${c.dialogues.map(d => `
+        <div class="stitle2">💬 ${d.title}</div>
+        <div class="dbox">
+          <div class="dbtitle">Diyalog — Oku ve Tekrarla</div>
+          ${d.lines.map(line => `
+            <div class="dline">
+              <span class="dp">${line.p}:</span> <strong>${line.d}</strong>
+              ${line.tr ? `<div class="dtu">🇹🇷 ${line.tr}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+
+      <div class="stitle2">📐 Gramer & Açıklama</div>
+      ${c.grammar.map(g => `<div class="${g.type === 'tr' ? 'trule' : 'grule'}">${g.rule}</div>`).join('')}
+
+      <div style="margin-top:22px;padding:14px 16px;background:rgba(33,145,80,.08);border:1px solid rgba(33,145,80,.2);border-radius:10px">
+        <strong style="color:var(--green)">✓ Pratik İpucu:</strong>
+        <span style="font-size:.85rem;color:var(--g600)"> Bu dersten 5 cümle yaz — kendi hayatından örnek ver. Sonra AI Tutor'a gönder, düzeltsin!</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('lmodal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('lmodal').classList.remove('open'); }
+document.getElementById('lmodal').addEventListener('click', e => { if(e.target === document.getElementById('lmodal')) closeModal(); });
+
+// ═══════════ QUIZ ═══════════
+let QS = { cur:0, score:0, answered:false, done:false };
+let QORDER = [...Array(QUIZ.length).keys()].sort(()=>Math.random()-.5).slice(0,12);
+let selOpt = null;
+
+function renderQuiz() {
+  if(QS.done) return;
+  const c = document.getElementById('quiz-container');
+  const qi = QORDER[QS.cur];
+  const q = QUIZ[qi];
+  c.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g400)">Soru ${QS.cur+1} / ${QORDER.length}</div>
+      <div style="flex:1;height:5px;background:var(--g200);border-radius:4px;overflow:hidden"><div style="width:${(QS.cur/QORDER.length)*100}%;height:100%;background:linear-gradient(90deg,var(--red),var(--gold2));border-radius:4px;transition:width .4s"></div></div>
+      <div style="font-size:.78rem;font-weight:600;color:var(--green)">✓ ${QS.score}</div>
+    </div>
+    <div class="qqbox">
+      <div class="qqnum">Soru ${QS.cur+1}</div>
+      <div class="qqtxt">${q.q}</div>
+      <div class="qopts" id="opts">
+        ${q.opts.map((o,i) => `<button class="qopt" onclick="selectOpt(${i},${q.ans},'${q.expl.replace(/'/g,"\\'")}')">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+      </div>
+      <div class="qfb" id="qfb"></div>
+    </div>
+    <div style="display:flex;gap:9px">
+      <button class="btnchk" id="chkbtn" onclick="checkQ()">Kontrol Et</button>
+      <button class="btnnxt" id="nxtbtn" onclick="nextQ()">Sonraki →</button>
+    </div>
+  `;
+  selOpt = null;
+}
+
+function selectOpt(idx, ans, expl) {
+  if(QS.answered) return;
+  selOpt = idx;
+  document.querySelectorAll('.qopt').forEach((o,i) => { o.classList.toggle('sel', i===idx); });
+}
+
+function checkQ() {
+  if(selOpt === null || QS.answered) return;
+  QS.answered = true;
+  const qi = QORDER[QS.cur];
+  const q = QUIZ[qi];
+  document.querySelectorAll('.qopt').forEach((o,i) => {
+    if(i === q.ans) o.classList.add('ok');
+    else if(i === selOpt) o.classList.add('bad');
+  });
+  const fb = document.getElementById('qfb');
+  fb.style.display = 'block';
+  if(selOpt === q.ans) { QS.score++; fb.className='qfb ok'; fb.innerHTML='✓ Doğru! ' + q.expl; }
+  else { fb.className='qfb bad'; fb.innerHTML='✗ Yanlış. ' + q.expl; }
+  document.getElementById('chkbtn').style.display = 'none';
+  document.getElementById('nxtbtn').style.display = 'inline-block';
+}
+
+function nextQ() {
+  QS.cur++; QS.answered = false; selOpt = null;
+  if(QS.cur >= QORDER.length) { showQResult(); return; }
+  renderQuiz();
+}
+
+function showQResult() {
+  QS.done = true;
+  const pct = Math.round((QS.score / QORDER.length) * 100);
+  document.getElementById('quiz-container').innerHTML = `
+    <div class="scorecard">
+      <div style="font-size:2.5rem;margin-bottom:11px">${pct>=75?'🎉':pct>=50?'👍':'📚'}</div>
+      <div class="bigscore">${pct}%</div>
+      <div style="font-size:.85rem;color:var(--g600);margin-top:5px;margin-bottom:18px">${QS.score} / ${QORDER.length} doğru</div>
+      <div style="background:var(--g100);border-radius:10px;padding:16px;margin-bottom:18px;font-size:.85rem;line-height:1.9;text-align:left">
+        <strong>Sonuç:</strong><br>
+        ${pct>=75?'✓ Geçtin! İnburgering sınav barajının üzerindesin.':'✗ Geçemedin. Dersleri tekrar et ve yeniden dene.'}<br>
+        Puan: ${QS.score}/${QORDER.length} · %${pct}<br>
+        İnburgering geçme notu: %75
+      </div>
+      <button class="btnstart" onclick="resetQ()">Tekrar Dene</button>
+    </div>`;
+}
+
+function resetQ() {
+  QS = {cur:0,score:0,answered:false,done:false}; selOpt = null;
+  QORDER = [...Array(QUIZ.length).keys()].sort(()=>Math.random()-.5).slice(0,12);
+  renderQuiz();
+}
+
+// ═══════════ EXAM ═══════════
+let ES = { q:0, ans:{}, timer:null };
+const EXAMQ = [...EXAM].sort(()=>Math.random()-.5);
+
+function startExam() {
+  ES = {q:0, ans:{}, timer:null};
+  document.getElementById('exam-s').style.display='none';
+  document.getElementById('exam-a').style.display='block';
+  document.getElementById('exam-r').style.display='none';
+  let sec = 90*60;
+  ES.timer = setInterval(()=>{
+    sec--;
+    const m = String(Math.floor(sec/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    const el = document.getElementById('etimer');
+    if(el){ el.textContent=m+':'+s; el.className='etimer'+(sec<600?' warn':''); }
+    if(sec<=0){ clearInterval(ES.timer); finishExam(); }
+  },1000);
+  renderEQ();
+}
+
+function renderEQ() {
+  const q = EXAMQ[ES.q];
+  document.getElementById('eqnum').textContent = ES.q+1;
+  const saved = ES.ans[ES.q];
+  document.getElementById('eq-wrap').innerHTML = `
+    <div class="qqbox">
+      <div class="qqnum">Soru ${ES.q+1} / 50</div>
+      <div class="qqtxt">${q.q}</div>
+      <div class="qopts">
+        ${q.opts.map((o,i)=>`<button class="qopt${saved===i?' sel':''}" onclick="eSelect(${i},this)">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+      </div>
+    </div>`;
+  document.getElementById('eprev').style.display = ES.q>0?'inline-block':'none';
+  document.getElementById('enext').textContent = ES.q===49?'Sınavı Bitir 🏁':'Sonraki →';
+}
+
+function eSelect(i) { ES.ans[ES.q]=i; document.querySelectorAll('#eq-wrap .qopt').forEach((o,idx)=>o.classList.toggle('sel',idx===i)); }
+function eNext() { if(ES.q<49){ ES.q++; renderEQ(); } else finishExam(); }
+function ePrev() { if(ES.q>0){ ES.q--; renderEQ(); } }
+
+function finishExam() {
+  clearInterval(ES.timer);
+  let correct = 0;
+  EXAMQ.forEach((q,i) => { if(ES.ans[i]===q.ans) correct++; });
+  const pct = Math.round((correct/50)*100);
+  document.getElementById('exam-a').style.display='none';
+  document.getElementById('exam-r').style.display='block';
+  document.getElementById('eremoji').textContent = pct>=75?'🎉':'📚';
+  document.getElementById('erscore').textContent = pct+'%';
+  document.getElementById('erlabel').textContent = pct>=75?'Geçtin! Gerçek sınava hazırsın.':'Geçemedin. Sınav barajı %75. Dersleri tekrar et.';
+  document.getElementById('erbreak').innerHTML = `<strong>Sonuçlar:</strong><br>Doğru: ${correct} / 50<br>Yüzde: %${pct}<br>Durum: ${pct>=75?'✓ GEÇTİN':'✗ GEÇEMEDİN'}<br>Cevaplanan: ${Object.keys(ES.ans).length} / 50`;
+}
+
+function resetExam() { ES={q:0,ans:{},timer:null}; document.getElementById('exam-s').style.display='block'; document.getElementById('exam-a').style.display='none'; document.getElementById('exam-r').style.display='none'; }
+
+// ═══════════ AI TUTOR ═══════════
+async function sendMsg() {
+  const inp = document.getElementById('cinput');
+  const msg = inp.value.trim();
+  if(!msg) return;
+  inp.value = '';
+  appendMsg(msg, 'u');
+  document.getElementById('qprompts').style.display = 'none';
+  document.querySelector('.typing').style.display = 'block';
+  scrollChat();
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`Sen Jan adında, Türk öğrencilere Hollandaca öğreten deneyimli bir dil öğretmenisin. Kullanıcının anadili Türkçe.
+
+YANIT FORMAT KURALI — HER ZAMAN UYGULA:
+1. 🇳🇱 **Hollandaca açıklama** (B1 düzeyinde, sade)
+2. 🇹🇷 **Türkçe açıklama** (detaylı, Türkçe'yle karşılaştırmalı)
+
+Türk öğrencilerin Hollandaca öğrenirken yaşadığı zorlukları iyi bilirsin:
+- de/het (Türkçe'de artikel yok)
+- G/CH sesi (Türkçe'de yok)
+- V2 kuralı (Türkçe SOV, Hollandaca SVO)
+- ij/ui/oe sesleri
+- haben vs sein (VTT'de)
+
+Avantajlarını da bilirsin:
+- Yan cümlede fiil sona gider — Türkçe gibi!
+- Düzenli fiil çekimi kurallı — Türkçe gibi
+- Kelime benzerliği bazı yerlerde var
+
+Somut örnekler ver. Tablo kullan gerekirse. Maksimum 350 kelime. Motivasyonu yüksek tut.`,
+        messages:[{role:'user',content:msg}]
+      })
+    });
+    document.querySelector('.typing').style.display = 'none';
+    const data = await resp.json();
+    const text = data.content?.map(c=>c.text||'').join('') || 'Bir hata oluştu. Lütfen tekrar dene.';
+    appendMsg(text, 't');
+  } catch(e) {
+    document.querySelector('.typing').style.display = 'none';
+    appendMsg('Bağlantı hatası. Lütfen tekrar dene! / Verbindingsfout. Probeer het opnieuw!', 't');
+  }
+}
+
+function sendQ(msg) { document.getElementById('cinput').value = msg; sendMsg(); }
+
+function appendMsg(text, who) {
+  const area = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = `msg msg-${who}`;
+  div.innerHTML = text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  area.insertBefore(div, document.querySelector('.typing'));
+  scrollChat();
+}
+
+function scrollChat() { const a = document.getElementById('chat-area'); a.scrollTop = a.scrollHeight; }
+
+// ═══════════ AUTH & STORAGE ═══════════
+const STORAGE_KEY_USERS = 'inburgering_users';
+const STORAGE_KEY_SESSION = 'inburgering_session';
+let currentUser = null;
+
+// Simple hash (not cryptographic — for demo purposes)
+function simpleHash(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) { h = (Math.imul(31, h) + str.charCodeAt(i)) | 0; }
+  return Math.abs(h).toString(36);
+}
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY_USERS) || '{}'); } catch { return {}; }
+}
+
+function saveUsers(users) {
+  localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+}
+
+function getUserData(username) {
+  const users = getUsers();
+  return users[username] || null;
+}
+
+function initDefaultProgress() {
+  return {
+    lessonsCompleted: [],
+    quizScores: [],
+    examScores: [],
+    totalHours: 0,
+    streak: 0,
+    lastLoginDate: new Date().toDateString(),
+    xp: 0,
+    joinDate: new Date().toLocaleDateString('tr-TR')
+  };
+}
+
+// ── TAB SWITCH ──
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.add('hidden'));
+  document.getElementById('form-' + tab).classList.remove('hidden');
+  event.target.classList.add('active');
+  clearAuthErrors();
+}
+
+function clearAuthErrors() {
+  ['login-err','reg-err','reg-ok'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.classList.remove('show'); el.textContent = ''; }
+  });
+  document.querySelectorAll('.field-input').forEach(i => i.classList.remove('error'));
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+
+function showOk(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+
+// ── REGISTER ──
+function doRegister() {
+  clearAuthErrors();
+  const name = document.getElementById('reg-name').value.trim();
+  const user = document.getElementById('reg-user').value.trim().toLowerCase();
+  const pass = document.getElementById('reg-pass').value;
+  const pass2 = document.getElementById('reg-pass2').value;
+
+  if (!name) { document.getElementById('reg-name').classList.add('error'); return showErr('reg-err', 'Ad soyad gerekli.'); }
+  if (!user || user.length < 3) { document.getElementById('reg-user').classList.add('error'); return showErr('reg-err', 'Kullanıcı adı en az 3 karakter olmalı.'); }
+  if (!/^[a-z0-9_]+$/.test(user)) { document.getElementById('reg-user').classList.add('error'); return showErr('reg-err', 'Kullanıcı adında sadece harf, rakam ve _ kullanılabilir.'); }
+  if (pass.length < 6) { document.getElementById('reg-pass').classList.add('error'); return showErr('reg-err', 'Şifre en az 6 karakter olmalı.'); }
+  if (pass !== pass2) { document.getElementById('reg-pass2').classList.add('error'); return showErr('reg-err', 'Şifreler eşleşmiyor.'); }
+
+  const users = getUsers();
+  if (users[user]) { document.getElementById('reg-user').classList.add('error'); return showErr('reg-err', 'Bu kullanıcı adı zaten alınmış. Başka bir ad seç.'); }
+
+  users[user] = {
+    name,
+    username: user,
+    hash: simpleHash(pass),
+    progress: initDefaultProgress()
+  };
+  saveUsers(users);
+  showOk('reg-ok', '✓ Hesap oluşturuldu! Giriş yapabilirsin.');
+  setTimeout(() => {
+    switchTab('login');
+    document.getElementById('login-user').value = user;
+  }, 1400);
+}
+
+// ── LOGIN ──
+function doLogin() {
+  clearAuthErrors();
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+
+  if (!user) { document.getElementById('login-user').classList.add('error'); return showErr('login-err', 'Kullanıcı adını gir.'); }
+  if (!pass) { document.getElementById('login-pass').classList.add('error'); return showErr('login-err', 'Şifreni gir.'); }
+
+  const users = getUsers();
+  const userData = users[user];
+  if (!userData) { document.getElementById('login-user').classList.add('error'); return showErr('login-err', 'Böyle bir kullanıcı bulunamadı.'); }
+  if (userData.hash !== simpleHash(pass)) { document.getElementById('login-pass').classList.add('error'); return showErr('login-err', 'Şifre yanlış.'); }
+
+  // Update streak
+  const today = new Date().toDateString();
+  const prog = userData.progress;
+  if (prog.lastLoginDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    prog.streak = (prog.lastLoginDate === yesterday) ? (prog.streak || 0) + 1 : 1;
+    prog.lastLoginDate = today;
+    users[user] = userData;
+    saveUsers(users);
+  }
+
+  currentUser = userData;
+  localStorage.setItem(STORAGE_KEY_SESSION, user);
+  loginSuccess();
+}
+
+function loginSuccess() {
+  document.getElementById('auth-overlay').classList.add('hidden');
+  updateHeaderUser();
+  updateDashboard();
+  renderLessons('all');
+}
+
+// ── LOGOUT ──
+function doLogout() {
+  currentUser = null;
+  localStorage.removeItem(STORAGE_KEY_SESSION);
+  document.getElementById('auth-overlay').classList.remove('hidden');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  clearAuthErrors();
+}
+
+// ── HEADER UPDATE ──
+function updateHeaderUser() {
+  if (!currentUser) return;
+  const initials = currentUser.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('huser-av').textContent = initials;
+  document.getElementById('huser-name').textContent = currentUser.name;
+  const streak = currentUser.progress.streak || 0;
+  document.getElementById('streak-display').textContent = '🔥 ' + streak + ' gün';
+}
+
+// ── SAVE PROGRESS ──
+function saveProgress() {
+  if (!currentUser) return;
+  const users = getUsers();
+  users[currentUser.username] = currentUser;
+  saveUsers(users);
+}
+
+// ── DASHBOARD UPDATE ──
+function updateDashboard() {
+  if (!currentUser) return;
+  const p = currentUser.progress;
+  const hoursEl = document.querySelector('.snum');
+  const statNums = document.querySelectorAll('.snum');
+  if(statNums[0]) statNums[0].textContent = p.totalHours || 0;
+  if(statNums[1]) statNums[1].textContent = (p.lessonsCompleted || []).length;
+  if(statNums[2]) {
+    const scores = p.quizScores || [];
+    statNums[2].textContent = scores.length > 0 ? '%' + Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : '—';
+  }
+
+  // Update XP bar if exists
+  const xpFill = document.querySelector('.xp-fill');
+  if (xpFill) { xpFill.style.width = Math.min((p.xp || 0) % 100, 100) + '%'; }
+
+  // Welcome message
+  const welcomeTitle = document.querySelector('#sec-dashboard .stitle');
+  if (welcomeTitle) {
+    const hour = new Date().getHours();
+    const greet = hour < 12 ? 'Günaydın' : hour < 18 ? 'İyi günler' : 'İyi akşamlar';
+    welcomeTitle.textContent = `${greet}, ${currentUser.name.split(' ')[0]}! 👋`;
+  }
+}
+
+// ── PATCH: track lesson completion ──
+const _origOpenLesson = openLesson;
+window.openLesson = function(i) {
+  _origOpenLesson(i);
+  if (!currentUser) return;
+  // Mark as viewed — add XP
+  if (!currentUser.progress.lessonsCompleted.includes(i)) {
+    currentUser.progress.lessonsCompleted.push(i);
+    currentUser.progress.xp = (currentUser.progress.xp || 0) + 20;
+    currentUser.progress.totalHours = parseFloat(((currentUser.progress.totalHours || 0) + 0.75).toFixed(1));
+    saveProgress();
+    updateDashboard();
+    updateHeaderUser();
+  }
+};
+
+// ── PATCH: track quiz completion ──
+const _origShowQResult = showQResult;
+window.showQResult = function() {
+  _origShowQResult();
+  if (!currentUser) return;
+  const pct = Math.round((QS.score / QORDER.length) * 100);
+  currentUser.progress.quizScores = currentUser.progress.quizScores || [];
+  currentUser.progress.quizScores.push(pct);
+  currentUser.progress.xp = (currentUser.progress.xp || 0) + 10;
+  saveProgress();
+  updateDashboard();
+};
+
+// ── PATCH: track exam completion ──
+const _origFinishExam = finishExam;
+window.finishExam = function() {
+  _origFinishExam();
+  if (!currentUser) return;
+  const scores = document.querySelectorAll('#exam-r .bigscore');
+  currentUser.progress.xp = (currentUser.progress.xp || 0) + 50;
+  saveProgress();
+};
+
+// ── AUTO-LOGIN from session ──
+function tryAutoLogin() {
+  const savedUser = localStorage.getItem(STORAGE_KEY_SESSION);
+  if (savedUser) {
+    const users = getUsers();
+    if (users[savedUser]) {
+      currentUser = users[savedUser];
+      // Update streak
+      const today = new Date().toDateString();
+      const prog = currentUser.progress;
+      if (prog.lastLoginDate !== today) {
+        const yesterday = new Date(Date.now() - 86400000).toDateString();
+        prog.streak = (prog.lastLoginDate === yesterday) ? (prog.streak || 0) + 1 : 1;
+        prog.lastLoginDate = today;
+        users[savedUser] = currentUser;
+        saveUsers(users);
+      }
+      loginSuccess();
+      return true;
+    }
+  }
+  return false;
+}
+
+// ═══════════ INIT ═══════════
+if (!tryAutoLogin()) {
+  renderLessons('all'); // render lessons even before login for preview
+}
+</script>
+</body>
+</html>
